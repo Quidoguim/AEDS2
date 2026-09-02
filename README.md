@@ -1,6 +1,6 @@
 # AEDS2 — Algoritmos e Estruturas de Dados II
 
-Repositório dedicado à disciplina de **Algoritmos e Estruturas de Dados II** (PUCRS – Escola Politécnica). Contém os enunciados fornecidos pelo professor e as implementações desenvolvidas ao longo do curso.
+Repositório dedicado à disciplina de **Algoritmos e Estruturas de Dados II** (PUCRS – Escola Politécnica, Prof. João Batista Souza de Oliveira). Contém os enunciados fornecidos pelo professor e as implementações desenvolvidas ao longo do curso.
 
 ## Estrutura
 
@@ -9,7 +9,7 @@ Trabalho1/
 └── enunciado/                           # material fornecido pelo professor
     ├── 01-enunciado.pdf                  # enunciado do trabalho
     ├── 02-criterios-avaliacao.pdf        # rubrica de avaliação do relatório
-    ├── 03-exemplo-artigo-modelo.pdf      # exemplo comentado de como escrever o relatório
+    ├── 03-exemplo-artigo-modelo.pdf      # exemplo comentado de como escrever o relatório (escrito pelo próprio professor)
     └── 04-exemplo-relatorio-anotado.pdf  # relatório de um trabalho anterior, corrigido e anotado pelo professor
 ```
 
@@ -36,7 +36,7 @@ O algoritmo — que deve usar **recursão** — precisa encontrar, para cada uma
 | 6 | 1.000.000 – 1.500.000 | ⬜ Não iniciado |
 | 7 | 1.500.000 – 2.000.000 | ⬜ Não iniciado |
 
-**Trabalho individual.**
+**Trabalho individual.** Entrega até **09/09/2026**.
 
 ### Entrega
 
