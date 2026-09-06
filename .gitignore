@@ -4,3 +4,10 @@
 
 # Claude Code (configuração local, não compartilhada)
 .claude/settings.local.json
+
+# Java (compilado localmente, sem build tool / metadados do VSCode)
+*.class
+bin/
+.classpath
+.project
+.settings/
