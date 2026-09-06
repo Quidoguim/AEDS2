@@ -11,3 +11,6 @@ bin/
 .classpath
 .project
 .settings/
+
+# Arquivos temporários do Word/Office (criados enquanto o documento está aberto)
+~$*.doc*
