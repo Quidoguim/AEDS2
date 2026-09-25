@@ -17,8 +17,12 @@ Trabalho1/
 Trabalho2/
 ├── enunciado/
 │   └── 01-enunciado.pdf
-└── casos-teste/                         # 8 tabuleiros (40×40 a 1500×1500)
-    └── caso*.txt
+├── casos-teste/                         # 8 tabuleiros (40×40 a 1500×1500)
+│   └── caso*.txt
+├── src/
+│   ├── CavaloHiperpulos.java            # solução: BFS no tabuleiro toroidal
+│   └── ValidacaoHiperpulos.java         # bateria de verificação independente
+└── NOTAS.md                             # decisões de modelagem e o que falta fazer
 ```
 
 Cada `TrabalhoN/` traz o enunciado do professor em `enunciado/` (renomeado de forma clara) e a implementação em `src/`. Todo relatório precisa cobrir: problema, modelagem, processo de solução (com exemplos e algoritmos), resultados dos casos de teste e conclusões — ver rubrica e exemplos em `Trabalho1/enunciado/`.
@@ -43,9 +47,28 @@ Tempo total ~9,1s. Vencedores completos e discussão no relatório ([`NumerosDec
 
 ## Trabalho 2 — O Cavalo e os Hiperpulos
 
-Tabuleiro toroidal (bordas se encostam) com dígitos 0–9 em cada casa. Um cavalo parte de `C` e precisa chegar a `S` no **menor número de movimentos possível**. O pulo é em L, mas o alcance cresce com o dígito da casa onde o cavalo está: 0 = L padrão de xadrez, dígitos maiores esticam o L. 8 casos de teste, tabuleiros de 40×40 a 1500×1500.
+Tabuleiro toroidal (as bordas se encostam) com um dígito 0–9 em cada casa. O cavalo parte de `C` e precisa chegar a `S` no **menor número de movimentos**. O pulo é em L e o dígito da casa onde o cavalo está estica as duas pernas do L: dígito `d` → pernas `(1+d, 2+d)`, sendo `d = 0` o pulo normal de xadrez.
 
-Status: em planejamento, linguagem ainda não definida. **Individual.**
+Modelado como busca em largura (BFS) sobre um grafo implícito de N² casas, com as coordenadas em aritmética modular para dar a volta no toro. Como o marcador `C` cobriu o dígito daquela casa, o primeiro pulo usa o dígito 0 — ver [`NOTAS.md`](Trabalho2/NOTAS.md) para a justificativa e o quanto essa escolha pesa em cada caso.
+
+| Caso | N | Movimentos | Tempo |
+| --- | --- | --- | --- |
+| caso40 | 40 | 4 | 0,001s |
+| caso80 | 80 | 6 | 0,004s |
+| caso100 | 100 | 8 | 0,005s |
+| caso150 | 150 | 11 | 0,006s |
+| caso200 | 200 | 9 | 0,004s |
+| caso400 | 400 | 19 | 0,014s |
+| caso800 | 800 | 43 | 0,073s |
+| caso1500 | 1500 | 34 | 0,033s |
+
+```bash
+cd Trabalho2/src
+javac CavaloHiperpulos.java && java CavaloHiperpulos      # resolve os 8 casos
+javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # bateria de verificação
+```
+
+**Individual.** Relatório ainda não iniciado.
 
 
 ## Licença

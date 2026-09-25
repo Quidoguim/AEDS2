@@ -20,8 +20,21 @@ Two files in `Trabalho1/enunciado/` are report-writing aids, not part of the pro
 - `04-exemplo-relatorio-anotado.pdf`: a real student report from a previous assignment with the professor's handwritten corrections — useful as a "what graders actually flag" reference (e.g., it was marked down for not showing pseudo-code, not justifying complexity/efficiency claims, and not explaining *why* an implementation choice was made, not just *what* it does).
 - `02-criterios-avaliacao.pdf`: the grading rubric — weights efficiency analysis, justified algorithm/pseudo-code choices, and a real conclusion (with concrete ideas for improvement) noticeably higher than prose polish.
 
+Trabalho 1 was delivered on 09/09/2026 and graded **6,5/10**. The professor's corrections were handwritten on the printed report and have **not been transcribed yet** — when the user provides them, record them in `Trabalho2/NOTAS.md` (pending item #1 there) before drafting the Trabalho 2 report.
+
+## Trabalho 2 — O Cavalo e os Hiperpulos
+
+Constraints (from `Trabalho2/enunciado/01-enunciado.pdf`): find the minimum number of knight moves from `C` to `S` on a toroidal N×N board whose digits (0-9) set the jump size; individual work; same five report topics as Trabalho 1. **Recursion is not required here** — unlike Trabalho 1.
+
+Two modelling decisions are load-bearing and were settled empirically, not read off the statement. Do not change them silently — the reasoning, the evidence and the discarded alternatives are written up in **`Trabalho2/NOTAS.md`**, which is the file to read before touching this assignment:
+
+- **Jump rule**: standing on a digit `d`, both legs of the L grow to `(1+d, 2+d)`, in the 8 usual orientations. Derived by testing hypotheses against the worked example the statement itself answers (C→S in 3 jumps).
+- **Digit hidden under the `C` marker**: the first jump uses digit 0 (the "pulo normal de xadrez" the statement defines as the base case). This changes the answer in 5 of the 8 test cases, so it is a real assumption, not a detail — `CavaloHiperpulos.DIGITO_SUPOSTO_EM_C` switches it, and `ValidacaoHiperpulos` prints the sensitivity table. Worth confirming with the professor.
+
+`ValidacaoHiperpulos.java` is a companion verification suite (independent reimplementation, cross-check against Dijkstra and exhaustive search, path legality, synthetic edge cases). Run it after any change to the solver.
+
 ## Conventions
 
 - **README.md**: keep it updated as the work progresses — it is the live status of the assignment (structure tree, per-range status table, deliverable checklist), not a one-time snapshot.
 - **Commits**: short imperative Portuguese subject line (e.g. "Adiciona", "Cria", "Renomeia"), no conventional-commit prefix; add a body paragraph when the *why* isn't obvious from the diff. Matches the convention used across this account's other course repos (`SO`, `PSB`, `SMA`, `CSW`).
-- No implementation language has been chosen yet for Trabalho 1 — once one is picked, extend `.gitignore` accordingly (it currently only covers macOS cruft and local Claude Code settings).
+- **Java** is the implementation language for both assignments: plain files in `TrabalhoN/src/`, default package, no build tool, run with `javac`/`java` from inside `src/`. Portuguese identifiers, `System.nanoTime()` for timing, results printed with `printf` in a shape that can be pasted into the README table. No test framework — verification lives in a companion class with its own `main`.
