@@ -10,7 +10,8 @@ Trabalho1/
 │   ├── 01-enunciado.pdf
 │   ├── 02-criterios-avaliacao.pdf
 │   ├── 03-exemplo-artigo-modelo.pdf
-│   └── 04-exemplo-relatorio-anotado.pdf
+│   ├── 04-exemplo-relatorio-anotado.pdf
+│   └── 05-feedback-professor-trabalho1.pdf   # só local (no .gitignore): correções e nota
 └── src/
     └── NumerosDecompostos.java          # solução recursiva
 
@@ -21,8 +22,15 @@ Trabalho2/
 │   └── caso*.txt
 ├── src/
 │   ├── CavaloHiperpulos.java            # solução: BFS no tabuleiro toroidal
-│   └── ValidacaoHiperpulos.java         # bateria de verificação independente
-└── NOTAS.md                             # decisões de modelagem e o que falta fazer
+│   ├── ValidacaoHiperpulos.java         # bateria de verificação independente
+│   └── MedicoesHiperpulos.java          # casas visitadas, tempos, variantes e sensibilidade
+├── relatorio/                           # relatório em LaTeX (Overleaf); preambulo.tex é o modelo fixo
+│   ├── main.tex
+│   ├── preambulo.tex
+│   ├── secoes/
+│   └── figuras/
+├── medicoes-referencia.txt              # saída de MedicoesHiperpulos usada no relatório
+└── NOTAS.md                             # decisões de modelagem, feedback do T1 e pendências
 ```
 
 Cada `TrabalhoN/` traz o enunciado do professor em `enunciado/` (renomeado de forma clara) e a implementação em `src/`. Todo relatório precisa cobrir: problema, modelagem, processo de solução (com exemplos e algoritmos), resultados dos casos de teste e conclusões — ver rubrica e exemplos em `Trabalho1/enunciado/`.
@@ -68,7 +76,9 @@ javac CavaloHiperpulos.java && java CavaloHiperpulos      # resolve os 8 casos
 javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # bateria de verificação
 ```
 
-**Individual.** Relatório ainda não iniciado.
+Duas leituras do enunciado são suposições, não fatos: qual dígito vale (o da casa onde o cavalo está, adotado, ou o da casa onde vai cair) e o dígito escondido sob o `C`. Só o `caso1500` dá a mesma resposta em todas as combinações, então vale confirmar com o professor.
+
+**Individual.** Relatório: rascunho completo em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ e um lembrete sobre a leitura do enunciado.
 
 
 ## Licença

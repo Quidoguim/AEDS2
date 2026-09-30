@@ -14,3 +14,18 @@ bin/
 
 # Arquivos temporários do Word/Office (criados enquanto o documento está aberto)
 ~$*.doc*
+
+# Feedback do professor com a nota (documento pessoal, fica só local)
+Trabalho1/enunciado/05-feedback-professor-trabalho1.pdf
+Trabalho2/feedback-trabalho1-local.md
+
+# LaTeX: arquivos gerados na compilação, o zip de upload e o PDF de rascunho
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+Trabalho2/relatorio-overleaf.zip
+Trabalho2/relatorio-rascunho.pdf

@@ -1,12 +1,16 @@
 # Trabalho 2 — notas de trabalho
 
-Onde paramos, o que foi decidido e por quê. Última atualização: 25/09/2026.
+Onde paramos, o que foi decidido e por quê. Última atualização: 30/09/2026.
 
 ## Estado atual
 
 - **Implementação**: pronta e validada (`src/CavaloHiperpulos.java`).
 - **Verificação**: bateria completa passando (`src/ValidacaoHiperpulos.java`).
-- **Relatório**: não iniciado — esperando o feedback do professor sobre o Trabalho 1.
+- **Relatório**: rascunho completo em LaTeX em `relatorio/` (compila; 11 páginas). Seguiu a
+  checklist do feedback do Trabalho 1 (mais abaixo). As duas figuras estão prontas em TikZ
+  (`relatorio/figuras/*.tex`). Faltam um lembrete `\pendente` sobre a leitura do enunciado e a
+  data de entrega.
+  Para o Overleaf: `relatorio-overleaf.zip` (gerado, fora do git) ou `relatorio/LEIA-ME.txt`.
 
 Para retomar:
 
@@ -14,7 +18,18 @@ Para retomar:
 cd Trabalho2/src
 javac CavaloHiperpulos.java && java CavaloHiperpulos       # resolve os 8 casos
 javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # confere tudo
+javac MedicoesHiperpulos.java && java -Xms2g -Xmx2g MedicoesHiperpulos   # números do relatório (~1 min)
 ```
+
+A saída usada no relatório está salva em `medicoes-referencia.txt`. Heap fixa (`-Xms2g -Xmx2g`)
+porque, com heap automática, o tempo absoluto da exploração completa oscilou entre ~55 e ~105 ns
+por casa de uma execução para outra (as razões entre tamanhos não mudaram); com heap fixa deu
+103 a 106 ns nas três execuções testadas.
+
+`MedicoesHiperpulos` (30/09/2026) não altera o solver: mede casas visitadas, tempo de
+exploração completa, duas variantes otimizadas (parada ao descobrir S; casas como inteiros) e a
+sensibilidade às duas ambiguidades do enunciado. Todo tempo é o melhor de 15 execuções.
+Ambiente das medições: Apple M2, 16 GB, macOS 26.7, Java 24.0.1.
 
 ## Resultados
 
@@ -43,25 +58,58 @@ centésimos de segundo.
 O enunciado do Trabalho 2 **não exige recursão** (diferente do Trabalho 1), então a BFS é
 iterativa, com fila.
 
-### Regra do pulo: como foi descoberta
+### Regra do pulo: o que está estabelecido e o que não está
 
-O enunciado descreve o pulo só por uma figura (L crescendo para 0, 1, 2), sem fórmula.
-A regra foi determinada rodando BFS sobre o tabuleiro-exemplo do próprio enunciado, cuja
-resposta ele informa (**C → S em 3 pulos**), e testando hipóteses:
+O enunciado descreve o pulo só por uma figura (L para os dígitos 0, 1 e 2), sem fórmula.
 
-| Hipótese | Resultado |
-| --- | --- |
-| pernas `(1+d, 2+d)` — as duas crescem juntas | **3 pulos, para qualquer dígito suposto em C** ✅ |
-| pernas `(2, 1+d)` ou `(1+d, 2)` | dá 3 só para alguns dígitos supostos — coincidência |
-| pernas `(1, 2+d)` ou `(2+d, 1)` | dá 2, 3 ou 4 conforme o dígito — não bate |
-| dígito do **destino** define o pulo | tabuleiro fica desconexo, sem solução — contradiz o exemplo |
+**Estabelecido: o tamanho do L.** Na figura as pernas têm 2 e 1 passos (d=0), 3 e 2 (d=1) e
+4 e 3 (d=2); as casas em vermelho são o acréscimo de `d` casas em cada perna. Regra: **pernas
+`(1+d, 2+d)` nas 8 orientações** (`(±(1+d), ±(2+d))` e `(±(2+d), ±(1+d))`). Com `d = 0` cai no
+pulo normal de xadrez. O exemplo numérico do enunciado (**C → S em 3 pulos**) confere: a regra
+dá 3 pulos para **qualquer** dígito que esteja escondido sob o C.
 
-Adotada: **dígito `d` na casa atual → pernas `(1+d, 2+d)`, nas 8 orientações** (`(±(1+d), ±(2+d))`
-e `(±(2+d), ±(1+d))`). Com `d = 0` cai no pulo normal de xadrez, como o enunciado diz.
+Alternativas para as pernas, testadas no exemplo com o dígito sob o C variando de 0 a 9
+(refeito em 30/09/2026):
 
-Também foi testada a leitura "o dígito é um limite, pode-se pular de 0 até `d`": ela
-igualmente reproduz os 3 pulos do exemplo, mas a figura mostra **uma** forma de L por
-número, não um conjunto de formas — por isso ficou a leitura "exatamente `d`".
+| Pernas | Pulos no exemplo | Leitura |
+| --- | --- | --- |
+| `(1+d, 2+d)` | 3 com todos os dígitos | adotada; bate com a figura |
+| `(2, 1+d)` ou `(1+d, 2)` | 3 com nove dos dez dígitos, 1 com o dígito 4 | o exemplo **não** as descarta; a figura sim (d=1 daria pernas iguais, 2 e 2, que não é um L) |
+| `(1, 2+d)` ou `(2+d, 1)` | 2, 3 ou 4 conforme o dígito | descartadas pela figura; a resposta dependeria do dígito |
+
+> **Correção de registro (30/09/2026).** Uma versão anterior desta tabela afirmava que
+> `(2, 1+d)` "dá 3 só para alguns dígitos" e que a leitura "o dígito do destino define o
+> pulo" deixava o tabuleiro "desconexo, sem solução, contradizendo o exemplo". Nenhuma das duas
+> afirmações se reproduz. A primeira está na tabela acima. A segunda é falsa: a leitura do
+> destino também dá 3 pulos no exemplo (ver abaixo). **Não repetir nenhuma das duas no
+> relatório.**
+
+**Não estabelecido: de qual casa vem o dígito.** Há duas leituras, e o exemplo do enunciado
+(3 pulos) é compatível com as duas:
+
+- **Origem (adotada)**: o dígito da casa onde o cavalo *está* define o pulo que ele dá.
+- **Destino**: o dígito da casa onde o cavalo vai *cair* define o pulo.
+
+Adotamos a de origem porque o enunciado diz que o número de cada casa "afeta o quanto o
+cavalo pode pular", e quem pula sai da casa em que está. É uma leitura do texto, não uma
+demonstração. A sensibilidade é grande (número de movimentos; `MedicoesHiperpulos` imprime a
+tabela, e o Python independente conferiu os casos 40 a 200 da leitura destino):
+
+| Caso | Origem, C=0 (adotada) | Origem, C qualquer | Destino, S=0 | Destino, S qualquer |
+| --- | --- | --- | --- | --- |
+| caso40 | 4 | 4 | 2 | 2 |
+| caso80 | 6 | 4 | 6 | 4 |
+| caso100 | 8 | 6 | 8 | 6 |
+| caso150 | 11 | 9 | 11 | 11 |
+| caso200 | 9 | 9 | 11 | 9 |
+| caso400 | 19 | 17 | 17 | 17 |
+| caso800 | 43 | 43 | 43 | 41 |
+| caso1500 | 34 | 34 | 34 | 34 |
+
+Só o caso1500 dá o mesmo resultado nas quatro combinações. **Isso precisa ser resolvido com
+o professor** (ou procurando respostas esperadas na página da disciplina, onde o enunciado diz
+que os casos de teste foram publicados) antes de tratar os números como definitivos. No
+relatório, a decisão deve aparecer como suposição explícita, com esta tabela.
 
 ### O dígito escondido sob o C
 
@@ -104,17 +152,65 @@ fila em array de int) para que um erro no solver não se repita igual na confer�
   o caminho ótimo é reconstruído e conferido pulo a pulo.
 - **Saída "impossível"**: exercitada por um tabuleiro sem solução achado por sorteio.
 
+## O que o feedback do Trabalho 1 pede do relatório
+
+O professor devolveu o relatório do Trabalho 1 com correções à mão e a rubrica preenchida. O
+detalhe (notas e anotações) fica em arquivo local, fora do git, porque o repositório é público.
+O que vale para o Trabalho 2, em resumo:
+
+1. **Sem capa.** Título e autor no topo da primeira página.
+2. **Todo "percebemos", "eficiente" ou "mais rápido" precisa de "como" e "por quê"** logo ao lado,
+   com dado ou dedução. É o padrão de quase todas as anotações.
+3. **Cada pseudo-código com explicação das etapas e um exemplo rodado** (trace). As tabelas de
+   trace devem mostrar o resultado intermediário, não só as condições.
+4. **Complexidade em Θ(·), de tempo e de espaço**, deduzida, e relacionada com os tempos medidos.
+5. **Justificar a técnica e o que se descartou**, inclusive a escolha de BFS iterativa (o T2 não
+   exige recursão): por que fila e não pilha, e por que recursão não serviria (profundidade até
+   N² estouraria a pilha, a mesma causa do estouro da versão ingênua do T1).
+6. **Figuras e tabelas para explicar o algoritmo**, não só para exibir resultados: um tabuleiro
+   pequeno com a expansão da BFS por níveis e o "dar a volta" do toro valem mais pontos do que
+   mais uma tabela de tempos.
+7. **Conclusão com melhorias concretas e explicadas** (como funcionaria, por que ajudaria, o
+   que custa), não uma frase solta.
+8. **Conferir cada explicação com um contraexemplo antes de escrever**: uma justificativa que só
+   vale para um caso particular induz o leitor ao erro.
+9. Gráficos com o eixo ajustado aos dados; não repetir o mesmo resultado em duas seções.
+10. **Manter a validação independente dos resultados**, que funcionou no T1. A
+    `ValidacaoHiperpulos` já cobre isso.
+
 ## Pendências
 
-1. **Anotar aqui o feedback do professor sobre o Trabalho 1** (nota 6,5/10, correções feitas
-   à mão no relatório impresso) — é o insumo para não repetir os mesmos erros.
-2. **Escrever o relatório**, cobrindo: problema, modelagem, processo de solução com exemplos
-   e algoritmos, resultados dos casos de teste e conclusões. Pontos que o professor cobrou no
-   relatório-exemplo anotado (`Trabalho1/enunciado/04-exemplo-relatorio-anotado.pdf`):
-   mostrar pseudo-código, justificar as afirmações de complexidade/eficiência e explicar
-   **por que** cada escolha de implementação foi feita, não só o que ela faz. A rubrica
-   (`02-criterios-avaliacao.pdf`) pesa mais análise de eficiência e conclusão com ideias
-   concretas de melhoria do que capricho de texto.
-3. Material bom para o relatório que já está pronto: a tabela de hipóteses da regra do pulo
-   (mostra o processo de modelagem) e a tabela de sensibilidade ao dígito sob o `C`
-   (justifica uma decisão de projeto com dado, não com achismo).
+1. ~~Anotar o feedback do Trabalho 1~~ — feito (detalhe em arquivo local; resumo na seção acima).
+2. ~~Escrever o relatório~~ — rascunho completo em `relatorio/`. A rubrica
+   (`02-criterios-avaliacao.pdf`) pesa, em ordem: Desenvolvimento 2,5; Algoritmos 2,0;
+   Análise/Conclusão 2,0; Apresentação, Eficiência e Testes 1,0 cada; Figuras/Tabelas 0,5.
+   **Eficiência vale só 1,0**: o que pesa é justificar decisões e a conclusão com melhorias.
+3. **Resolver a leitura do enunciado** (seção "Regra do pulo"): de qual casa vem o dígito e
+   qual dígito está sob `C`/`S`. Sete dos oito casos mudam de resposta conforme a escolha.
+   Perguntar ao professor ou procurar respostas esperadas na página da disciplina. Se a
+   leitura mudar, ajustar `relatorio/secoes/02-modelagem.tex` (Tabela 2 e texto), o Resumo, a
+   Tabela de resultados e os números do solver.
+4. ~~Figuras do relatório~~ — prontas em TikZ (`fig-pulos-em-L`, `fig-camadas-bfs`). Os 100
+   pares dígito/distância da segunda foram conferidos por script contra o tabuleiro do enunciado
+   e contra `medicoes-referencia.txt`. Falta só o usuário conferir se estão do seu gosto.
+5. **Antes de entregar**: resolver os `\pendente`, trocar `\today` por uma data fixa e conferir
+   o PDF contra a checklist "O que isso pede do relatório do Trabalho 2".
+
+### Decisões do rascunho do relatório (30/09/2026)
+
+- **Sem capa, sem travessões** (o T1 teve os travessões removidos na revisão final).
+- **Voz impessoal, sem primeira pessoa.** O modelo do professor
+  (`Trabalho1/enunciado/03-exemplo-artigo-modelo.pdf`, p. 2) diz para nunca usar o singular
+  ("fiz", "analisei"), mesmo em trabalho individual, e que a voz passiva/impessoal ("faz-se",
+  "analisa-se") é "melhor ainda" que o plural. O usuário notou que "pensamos/comparamos" sugeria
+  trabalho em dupla e pediu singular; foi explicado que o professor proíbe e o texto foi passado
+  para a voz impessoal ("modela-se", "foi conferido"). Ao escrever novas seções, evitar também
+  "nós".
+- **Afirmações que o relatório NÃO faz**, porque não se sustentam: que o exemplo do enunciado
+  descarta a leitura "dígito do destino"; que `(2, 1+d)` só funciona para alguns dígitos.
+- **Melhorias da Conclusão foram medidas**, não só propostas: parar ao descobrir S (1,5 a 1,9×) e
+  casas como inteiros (2,9 a 4,4×). A busca bidirecional aparece como ideia não testada, com o
+  motivo (exige o grafo inverso).
+- Os tempos vêm de `medicoes-referencia.txt` (heap fixa de 2 GB). Os números da Tabela de
+  variantes e da Tabela de resultados são medições separadas da mesma função e diferem alguns
+  por cento; o texto avisa.
