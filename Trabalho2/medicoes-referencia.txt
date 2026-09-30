@@ -1,0 +1,83 @@
+# Saída de referência do relatório (MedicoesHiperpulos), gerada em 30/09/2026
+# Comando : cd Trabalho2/src && javac MedicoesHiperpulos.java && java -Xms2g -Xmx2g MedicoesHiperpulos
+# Ambiente: Apple M2, 16 GB, macOS 26.7, Java 24.0.1
+# Os tempos variam alguns por cento entre execuções; os números do relatório vêm desta.
+
+Variantes conferidas contra o solver: exemplo e os 8 casos.
+Exemplo do enunciado confere (3 pulos) nas duas leituras do pulo.
+
+== Exemplo do enunciado (10x10) ==
+C = (1,8)   S = (6,0)   menor caminho = 3 pulos
+| pulo | origem | dígito | pernas | deslocamento | sem módulo | destino (mod 10) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | (1,8) | 0 | (1,2) | (+1,-2) | (2,6) | (2,6) |
+| 2 | (2,6) | 9 | (10,11) | (+10,+11) | (12,17) | (2,7) |
+| 3 | (2,7) | 2 | (3,4) | (+4,+3) | (6,10) | (6,0) |
+Casas descobertas por nível da BFS (exploração completa): [1, 8, 36, 42, 13]  total alcançável = 100 de 100
+Casas retiradas da fila até S (parada em S): 67
+Distância de cada casa a partir de C (base da figura da BFS):
+  1 2 3 2 3 4 1 2 3 4 
+  2 3 2 3 4 3 2 3 0 3 
+  1 2 3 2 3 2 1 2 3 4 
+  2 3 2 3 2 3 2 1 4 1 
+  3 4 3 2 3 2 3 4 3 2 
+  2 3 2 3 2 3 2 3 4 3 
+  3 2 3 2 3 2 3 2 3 2 
+  2 3 2 3 2 3 2 3 2 3 
+  3 2 3 4 3 2 3 2 3 4 
+  2 3 4 3 2 3 4 1 4 1 
+
+== Resultado por caso (tempo: melhor de 15) ==
+| Caso | N | Movimentos | Casas retiradas até S | % de N² | Tempo (ms) |
+| --- | --- | --- | --- | --- | --- |
+| caso40 | 40 | 4 | 425 | 26,6% | 0,02 |
+| caso80 | 80 | 6 | 4.483 | 70,0% | 0,40 |
+| caso100 | 100 | 8 | 8.596 | 86,0% | 0,78 |
+| caso150 | 150 | 11 | 20.863 | 92,7% | 1,92 |
+| caso200 | 200 | 9 | 15.483 | 38,7% | 1,50 |
+| caso400 | 400 | 19 | 92.523 | 57,8% | 8,79 |
+| caso800 | 800 | 43 | 597.282 | 93,3% | 57,24 |
+| caso1500 | 1500 | 34 | 375.230 | 16,7% | 36,30 |
+
+== Exploração completa, sem parar em S (tempo: melhor de 15) ==
+| Caso | N | N² | Casas alcançadas | Tempo (ms) | ns por casa | Tempo / anterior | N² / anterior |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| caso40 | 40 | 1.600 | 1.600 | 0,14 | 88 | - | - |
+| caso80 | 80 | 6.400 | 6.398 | 0,62 | 96 | 4,4 | 4,0 |
+| caso100 | 100 | 10.000 | 9.999 | 0,97 | 97 | 1,6 | 1,6 |
+| caso150 | 150 | 22.500 | 22.494 | 2,23 | 99 | 2,3 | 2,3 |
+| caso200 | 200 | 40.000 | 39.992 | 4,02 | 101 | 1,8 | 1,8 |
+| caso400 | 400 | 160.000 | 159.950 | 16,41 | 103 | 4,1 | 4,0 |
+| caso800 | 800 | 640.000 | 639.857 | 67,35 | 105 | 4,1 | 4,0 |
+| caso1500 | 1500 | 2.250.000 | 2.249.516 | 241,98 | 108 | 3,6 | 3,5 |
+
+== Variantes do solver (tempo: melhor de 15) ==
+A = solver atual (para ao retirar S da fila, fila de int[])
+B = A, mas devolve assim que S é descoberto
+C = B com casas codificadas como linha*N+coluna e pulos sem alocar vetores
+| Caso | N | A (ms) | B (ms) | C (ms) | A/B | A/C |
+| --- | --- | --- | --- | --- | --- | --- |
+| caso40 | 40 | 0,02 | 0,01 | 0,00 | 3,9x | 9,8x |
+| caso80 | 80 | 0,41 | 0,17 | 0,04 | 2,3x | 10,7x |
+| caso100 | 100 | 0,75 | 0,39 | 0,17 | 1,9x | 4,4x |
+| caso150 | 150 | 1,94 | 1,09 | 0,48 | 1,8x | 4,0x |
+| caso200 | 200 | 1,36 | 0,75 | 0,34 | 1,8x | 4,0x |
+| caso400 | 400 | 8,77 | 5,12 | 2,43 | 1,7x | 3,6x |
+| caso800 | 800 | 57,95 | 38,26 | 16,39 | 1,5x | 3,5x |
+| caso1500 | 1500 | 36,36 | 23,25 | 12,61 | 1,6x | 2,9x |
+
+== Sensibilidade às ambiguidades do enunciado (movimentos) ==
+Origem  = o dígito da casa onde o cavalo está define o pulo (leitura adotada)
+Destino = o dígito da casa onde o cavalo vai cair define o pulo
+Dígito escondido: sob o C na leitura Origem, sob o S na leitura Destino; 0 = pulo normal, qualquer = o menor resultado entre os dígitos 0 a 9
+| Caso | Origem, C=0 (adotada) | Origem, C qualquer | Destino, S=0 | Destino, S qualquer | Todas iguais? |
+| --- | --- | --- | --- | --- | --- |
+| caso40 | 4 | 4 | 2 | 2 | não |
+| caso80 | 6 | 4 | 6 | 4 | não |
+| caso100 | 8 | 6 | 8 | 6 | não |
+| caso150 | 11 | 9 | 11 | 11 | não |
+| caso200 | 9 | 9 | 11 | 9 | não |
+| caso400 | 19 | 17 | 17 | 17 | não |
+| caso800 | 43 | 43 | 43 | 41 | não |
+| caso1500 | 34 | 34 | 34 | 34 | sim |
+
