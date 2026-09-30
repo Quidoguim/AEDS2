@@ -1,0 +1,165 @@
+\section{Algoritmo}
+\label{sec:algoritmo}
+
+\subsection{Escolha do método}
+\label{sec:metodo}
+
+Como visto na Seção~\ref{sec:grafo}, o problema é achar um menor caminho em um grafo em que
+todas as arestas custam 1. Três métodos clássicos foram considerados:
+
+\begin{itemize}
+  \item \textbf{Busca em profundidade (DFS).} Segue um caminho até o fim antes de tentar
+    outro. Ela acha \emph{um} caminho até S, mas não garante que seja o mais curto; para
+    garantir, seria preciso testar todos os caminhos possíveis, o que é inviável. Além disso, se
+    fosse escrita com recursão, a profundidade poderia chegar a $N^2$ chamadas aninhadas (mais
+    de dois milhões no maior tabuleiro), e a pilha de execução não suporta isso: no
+    Trabalho~1, a pilha já estourou com algumas dezenas de milhares de chamadas.
+  \item \textbf{Algoritmo de Dijkstra.} Acha menores caminhos quando as arestas têm custos
+    diferentes, usando uma fila de prioridade. Aqui todos os custos são iguais, então esse
+    trabalho extra é desnecessário: a BFS obtém o mesmo resultado com menos trabalho,
+    $O(V + E)$ contra $O((V + E) \log V)$~\cite{cormen}. O Dijkstra é usado apenas como
+    conferência independente dos resultados (Seção~\ref{sec:resultados}).
+  \item \textbf{Busca em largura (BFS).} Explora por camadas, e uma fila simples basta. É o
+    método adotado.
+\end{itemize}
+
+Como o enunciado não exige recursão, a BFS é escrita com um laço e uma fila, e não com
+chamadas recursivas. Isso evita o limite da pilha e deixa o código mais direto: a própria fila
+guarda o que ainda falta visitar.
+
+\subsection{O algoritmo}
+\label{sec:pseudocodigo}
+
+O Algoritmo~\ref{alg:bfs} mostra a busca, e o Algoritmo~\ref{alg:pulos} mostra o cálculo dos
+pulos de uma casa. Nas linhas, $(l, c)$ é uma casa (linha e coluna) e $N$ é o lado do
+tabuleiro.
+
+\begin{algorithm}[ht]
+  \caption{Menor número de movimentos do cavalo de C até S}
+  \label{alg:bfs}
+  \begin{algorithmic}[1]
+    \Function{MenorNumeroDeMovimentos}{$T$}
+      \State $N \gets$ lado do tabuleiro $T$ \label{lin:lado}
+      \State $(l_C, c_C) \gets$ posição de C em $T$;\quad $(l_S, c_S) \gets$ posição de S em $T$ \label{lin:pos}
+      \State $dist[l][c] \gets -1$ para todas as casas \label{lin:init}
+      \State $dist[l_C][c_C] \gets 0$ \label{lin:dist0}
+      \State $fila \gets$ fila vazia;\quad insere $(l_C, c_C)$ na $fila$ \label{lin:fila0}
+      \While{$fila$ não está vazia} \label{lin:while}
+        \State $(l, c) \gets$ retira o primeiro elemento da $fila$ \label{lin:retira}
+        \If{$(l, c) = (l_S, c_S)$} \label{lin:teste}
+          \State \Return $dist[l][c]$ \label{lin:resposta}
+        \EndIf
+        \State $d \gets$ dígito da casa $(l, c)$ \Comment{0 se for a casa C} \label{lin:digito}
+        \ForAll{$(a, b)$ em \Call{Pulos}{$d$}} \label{lin:for}
+          \State $l' \gets (l + a) \bmod N$;\quad $c' \gets (c + b) \bmod N$ \label{lin:mod}
+          \If{$dist[l'][c'] = -1$} \label{lin:novo}
+            \State $dist[l'][c'] \gets dist[l][c] + 1$ \label{lin:marca}
+            \State insere $(l', c')$ na $fila$ \label{lin:insere}
+          \EndIf
+        \EndFor
+      \EndWhile
+      \State \Return $-1$ \Comment{S não pode ser alcançada} \label{lin:imposs}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[ht]
+  \caption{Pulos possíveis a partir de uma casa com dígito $d$}
+  \label{alg:pulos}
+  \begin{algorithmic}[1]
+    \Function{Pulos}{$d$}
+      \State $p \gets 1 + d$;\quad $q \gets 2 + d$ \label{lin:pq}
+      \State \Return $\{(\pm p, \pm q),\ (\pm q, \pm p)\}$ \Comment{8 pares, combinando os sinais} \label{lin:oito}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+\textbf{Como funciona.} As linhas \ref{lin:lado} a \ref{lin:fila0} preparam a busca. A matriz
+$dist$ guarda, para cada casa, quantos pulos foram necessários para chegar a ela, e o valor
+$-1$ significa ``ainda não descoberta'' (linha~\ref{lin:init}). A casa C começa com distância 0
+e é a única na fila (linhas~\ref{lin:dist0} e~\ref{lin:fila0}).
+
+O laço das linhas \ref{lin:while} a \ref{lin:insere} é o coração do algoritmo. A cada volta,
+ele retira da fila a casa mais antiga (linha~\ref{lin:retira}). Se for S, a distância dela é a
+resposta (linhas~\ref{lin:teste} e~\ref{lin:resposta}): pelo argumento da
+Seção~\ref{sec:grafo}, a primeira vez que S sai da fila já é pelo caminho mais curto. Se não
+for, o algoritmo pega o dígito da casa (linha~\ref{lin:digito}) e percorre os 8 pulos que esse
+dígito permite (linha~\ref{lin:for}). Para cada pulo, calcula a casa de chegada com aritmética
+modular, que dá a volta no toro (linha~\ref{lin:mod}); se essa casa ainda não foi descoberta
+(linha~\ref{lin:novo}), marca a distância dela, que é a da casa atual mais um
+(linha~\ref{lin:marca}), e a coloca no fim da fila (linha~\ref{lin:insere}). Se a fila esvazia
+sem que S apareça, todas as casas alcançáveis já foram visitadas e S não está entre elas:
+a resposta é $-1$, que o programa apresenta como ``impossível'' (linha~\ref{lin:imposs}).
+
+\subsection{Decisões de implementação}
+\label{sec:decisoes}
+
+\begin{itemize}
+  \item \textbf{A matriz $dist$ faz dois papéis.} Ela guarda a distância de cada casa e, ao
+    mesmo tempo, marca quais casas já foram descobertas ($-1$ quando não foram). Assim não
+    é preciso uma segunda estrutura de visitadas, e o teste da linha~\ref{lin:novo} leva
+    tempo constante.
+  \item \textbf{A casa é marcada ao entrar na fila, não ao sair.} Se a marcação fosse só ao sair,
+    uma mesma casa poderia entrar na fila várias vezes, uma para cada vizinho que a descobrisse,
+    e o trabalho aumentaria. Marcando na linha~\ref{lin:marca}, cada casa entra no máximo uma
+    vez, e é isso que limita o custo total (Seção~\ref{sec:eficiencia}).
+  \item \textbf{A fila é um \texttt{ArrayDeque} do Java}, que insere no fim e retira do início
+    em tempo constante.
+  \item \textbf{Usa-se \texttt{Math.floorMod} em vez do operador \texttt{\%}.} Em Java,
+    \texttt{\%} devolve resultado negativo para números negativos (por exemplo,
+    $-2 \bmod 10$ dá $-2$, e não 8), e as coordenadas de chegada podem ficar negativas quando
+    o pulo vai para cima ou para a esquerda. O \texttt{floorMod} devolve sempre um valor entre
+    0 e $N - 1$.
+  \item \textbf{O dígito da casa C (linha~\ref{lin:digito}) vale 0}, conforme a suposição da
+    Seção~\ref{sec:duvidas}. A casa S nunca é expandida, porque o laço termina ao retirá-la.
+  \item \textbf{A busca termina ao retirar S da fila (linha~\ref{lin:teste}).} Poderia terminar
+    antes, ao descobrir S; esse ganho foi medido na Seção~\ref{sec:conclusao}.
+\end{itemize}
+
+\subsection{Exemplo passo a passo}
+\label{sec:exemplo}
+
+O algoritmo foi aplicado ao tabuleiro da Figura~\ref{fig:exemplo}. A BFS descobre as casas em
+camadas: 1 casa a 0 pulos (a própria C), 8 casas a 1 pulo, 36 a 2 pulos, 42 a 3 pulos e 13 a
+4 pulos, num total de 100, ou seja, todas as casas do tabuleiro são alcançáveis. A casa S
+está na camada 3. Ela é retirada da fila depois que 67 casas foram retiradas (contando a
+própria S), e a busca termina.
+
+Para saber o caminho, anda-se de S para trás: em cada camada procura-se uma casa cujo pulo
+chega na casa seguinte. Um dos caminhos mínimos é
+$C(1, 8) \to (2, 6) \to (2, 7) \to S(6, 0)$, detalhado na Tabela~\ref{tab:trace}.
+
+\begin{table}[ht]
+  \centering
+  \caption{Um caminho mínimo no tabuleiro de exemplo, pulo a pulo. As coordenadas são
+  (linha, coluna) e o tabuleiro tem $N = 10$.}
+  \label{tab:trace}
+  \small
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Pulo} & \textbf{Sai de} & \textbf{Dígito} & \textbf{Pernas} & \textbf{Deslocamento}
+      & \textbf{Sem o módulo} & \textbf{Chega em}\\
+    \hline
+    1 & $(1, 8)$ & 0 & $(1, 2)$ & $(+1, -2)$ & $(2, 6)$ & $(2, 6)$\\
+    \hline
+    2 & $(2, 6)$ & 9 & $(10, 11)$ & $(+10, +11)$ & $(12, 17)$ & $(2, 7)$\\
+    \hline
+    3 & $(2, 7)$ & 2 & $(3, 4)$ & $(+4, +3)$ & $(6, 10)$ & $(6, 0)$\\
+    \hline
+  \end{tabular}
+\end{table}
+
+O primeiro pulo sai de C e, pela suposição da Seção~\ref{sec:duvidas}, é um pulo normal de
+cavalo. O segundo mostra o toro em ação: o dígito 9 dá pernas de 10 e 11, que em um tabuleiro
+de lado 10 equivalem a 0 e 1, e o cavalo chega à casa vizinha da direita. O terceiro sai pela
+borda direita (coluna 10) e entra pela esquerda (coluna 0), caindo em S. A
+Figura~\ref{fig:camadas} mostra as camadas e o caminho no tabuleiro.
+
+\begin{figure}[ht]
+  \centering
+  \input{figuras/fig-camadas-bfs}
+  \caption{Camadas da BFS no tabuleiro de exemplo e um caminho mínimo de C a S. A cor indica a
+  distância até C, e as setas numeradas são os três pulos da Tabela~\ref{tab:trace}. O pulo 3
+  sai pela borda direita e entra pela esquerda.}
+  \label{fig:camadas}
+\end{figure}

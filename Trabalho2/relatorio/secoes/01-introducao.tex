@@ -1,0 +1,63 @@
+\section{Introdução}
+\label{sec:introducao}
+
+O problema tratado neste trabalho é um desafio de xadrez com regras diferentes das habituais.
+Dado um tabuleiro quadrado de lado $N$, com um dígito de 0 a 9 em cada casa, e um cavalo em
+uma casa marcada com C, o objetivo é levar o cavalo até uma casa de saída, marcada com S, no
+menor número possível de movimentos.
+
+Duas regras tornam o problema diferente do xadrez comum. A primeira é que o dígito das casas
+aumenta o pulo do cavalo: o dígito 0 corresponde ao pulo normal de xadrez, em forma de L, e
+dígitos maiores esticam o L, como mostra a Figura~\ref{fig:pulos}. A segunda é que as bordas
+do tabuleiro se encostam: se o cavalo sai pela direita, entra pela esquerda, e se sai por
+cima, entra por baixo. Por isso diz-se que o tabuleiro é \emph{toroidal}.
+
+\begin{figure}[ht]
+  \centering
+  \input{figuras/fig-pulos-em-L}
+  \caption{Forma do pulo para os dígitos 0, 1 e 2. As casas brancas formam o L do dígito 0, e as
+  casas coloridas são as $d$ casas acrescentadas em cada perna. O ponto é a casa de partida, o
+  $\times$ é a casa de chegada, e os números indicam o comprimento de cada perna, em passos.}
+  \label{fig:pulos}
+\end{figure}
+
+O enunciado traz um tabuleiro de exemplo, com 10 linhas e 10 colunas
+(Figura~\ref{fig:exemplo}), e informa que nele o cavalo vai de C a S em 3 pulos. Esse
+exemplo é usado ao longo do relatório para explicar e conferir o algoritmo.
+
+\begin{figure}[ht]
+  \centering
+  \ttfamily
+  \begin{tabular}{@{}r@{\hspace{1.2em}}l@{}}
+     & 0123456789\\
+    0 & 4286305993\\
+    1 & 67126514C1\\
+    2 & 3541559238\\
+    3 & 6344361236\\
+    4 & 0419867802\\
+    5 & 4271613350\\
+    6 & S668962685\\
+    7 & 6244051139\\
+    8 & 3714702030\\
+    9 & 0084825587\\
+  \end{tabular}
+  \caption{Tabuleiro de exemplo do enunciado. Linhas e colunas são numeradas de 0 a 9, a partir do
+  canto superior esquerdo: C está na linha 1, coluna 8, e S na linha 6, coluna 0.}
+  \label{fig:exemplo}
+\end{figure}
+
+Cada caso de teste é um arquivo de texto com $N$ linhas de $N$ caracteres: dígitos de 0 a 9,
+exatamente um C e exatamente um S (isso foi conferido nos oito arquivos). Para cada caso, a saída
+é o menor número de movimentos de C até S, ou a palavra ``impossível'' quando S não pode ser
+alcançada. Os oito tabuleiros vão de $40 \times 40$ a $1500 \times 1500$ casas, e o maior
+deles tem mais de dois milhões de casas.
+
+O enunciado não exige recursão, e a solução apresentada usa um laço com uma fila, pelos
+motivos explicados na Seção~\ref{sec:algoritmo}.
+
+Este relatório está organizado da seguinte forma: a Seção~\ref{sec:modelagem} mostra como o
+problema foi modelado, incluindo duas dúvidas de interpretação do enunciado; a
+Seção~\ref{sec:algoritmo} apresenta o algoritmo, com um exemplo passo a passo; a
+Seção~\ref{sec:eficiencia} analisa a eficiência; a Seção~\ref{sec:resultados} mostra os
+resultados dos oito casos e como eles foram conferidos; e a Seção~\ref{sec:conclusao} traz as
+conclusões.

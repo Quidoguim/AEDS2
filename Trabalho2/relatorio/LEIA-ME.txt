@@ -1,0 +1,37 @@
+Relatório do Trabalho 2 (LaTeX)
+===============================
+
+Como usar no Overleaf
+---------------------
+1. overleaf.com > New Project > Upload Project > escolha relatorio-overleaf.zip
+   (está em Trabalho2/, um nível acima desta pasta).
+2. Menu (canto superior esquerdo) > Main document: main.tex. O compilador pode ficar no
+   padrão (pdfLaTeX) ou ser XeLaTeX; o preâmbulo funciona nos dois.
+3. Clique em Recompile.
+
+Estrutura
+---------
+main.tex        título, autor, data, resumo e a ordem das seções. Edite aqui os dados do
+                trabalho.
+preambulo.tex   o MODELO FIXO: fonte Times, margens, legendas, pseudo-código numerado,
+                macros de figura. Não precisa mudar de um trabalho para o outro.
+secoes/         uma seção por arquivo (01-introducao ... 06-conclusao).
+figuras/        imagens; veja figuras/LEIA-ME.txt.
+
+Antes de entregar
+-----------------
+- Procure por "pendente" (Ctrl+Shift+F no Overleaf) e resolva cada lembrete vermelho.
+- As figuras já estão prontas em TikZ (pasta figuras/; veja figuras/LEIA-ME.txt). Confira se
+  estão do seu gosto e ajuste cores e rótulos direto nos arquivos .tex delas.
+- Troque \date{\today} em main.tex por uma data fixa.
+- Relatórios não levam capa: o título fica no topo da primeira página.
+
+Usar como modelo em outro trabalho
+----------------------------------
+Copie esta pasta, apague o conteúdo de secoes/ e de figuras/, troque título e autor em main.tex
+e escreva as novas seções. Ao terminar cada seção, confira as cobranças do professor em
+Trabalho2/NOTAS.md (seção "O que o feedback do Trabalho 1 pede do relatório").
+
+Compilar localmente (opcional)
+------------------------------
+tectonic -X compile main.tex --outdir /caminho/de/saida

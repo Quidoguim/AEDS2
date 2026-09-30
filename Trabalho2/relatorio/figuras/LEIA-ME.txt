@@ -1,0 +1,31 @@
+Pasta das figuras do relatório
+==============================
+
+As figuras deste relatório são desenhadas pelo próprio LaTeX (TikZ), cada uma em um arquivo
+.tex desta pasta. O texto da seção só faz \input{figuras/nome}. Assim dá para editar cores,
+posições e rótulos direto no Overleaf, sem programa de desenho.
+
+Figuras
+-------
+
+1. fig-pulos-em-L.tex     (usada em secoes/01-introducao.tex)
+   Os três L do enunciado (dígitos 0, 1 e 2). Para mudar a cor das casas acrescentadas,
+   edite \colorlet{extra}{...}. Para mostrar outro dígito, acrescente um par "d/posição" na
+   lista do \foreach (por exemplo, 3/17.2).
+
+2. fig-camadas-bfs.tex    (usada em secoes/03-algoritmo.tex)
+   Tabuleiro 10x10 do exemplo colorido pela distância até C, com o caminho mínimo.
+   Cada casa é um par "dígito/distância"; as distâncias vêm de ../medicoes-referencia.txt.
+   Para mudar as cores, edite os \colorlet{nivelN}{...}; para mudar o caminho, edite os
+   comandos \draw logo abaixo do comentário "caminho mínimo".
+
+O gráfico de tempo por tamanho (Figura 4) e o tabuleiro de exemplo (Figura 2) também são
+gerados pelo LaTeX, a partir dos dados escritos em secoes/04-eficiencia.tex e
+secoes/01-introducao.tex.
+
+Para usar uma imagem pronta (PDF, PNG ou JPG) em vez de TikZ
+------------------------------------------------------------
+Coloque o arquivo nesta pasta e, no .tex da seção, troque \input{figuras/nome} por
+\includegraphics[width=0.8\linewidth]{figuras/nome}. Prefira PDF (vetorial) quando o
+programa de desenho permitir. O modelo também tem a macro \espacofigura{altura}{instrução},
+que desenha uma caixa tracejada reservando o lugar de uma figura ainda não feita.

@@ -1,0 +1,48 @@
+\documentclass[11pt,a4paper]{article}
+\input{preambulo}
+
+\hypersetup{pdftitle={Trabalho 2: O Cavalo e os Hiperpulos},
+            pdfauthor={Guilherme Guimarães Santos}}
+
+% Relatórios não têm capa: título, autor e data ficam no topo da primeira página.
+\title{Trabalho 2: O Cavalo e os Hiperpulos}
+\author{Guilherme Guimarães Santos\\[2pt]
+  \small Escola Politécnica, PUCRS\\
+  \small Algoritmos e Estruturas de Dados II, Turma 320\\
+  \small Prof. João Batista Souza de Oliveira}
+\date{\today} % troque por uma data fixa na entrega, por exemplo: 10 de outubro de 2026
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Este trabalho trata de um desafio de xadrez com regras diferentes das habituais: em um
+tabuleiro quadrado cujas bordas se encostam, cada casa traz um dígito de 0 a 9 que aumenta
+o pulo em L do cavalo, e o cavalo deve ir da casa C até a saída S no menor número de
+movimentos. O tabuleiro é modelado como um grafo, com uma casa por vértice e um pulo por
+aresta, e o problema é resolvido com busca em largura (BFS), que encontra o menor caminho
+quando todas as arestas custam o mesmo. O custo da BFS é proporcional ao número de casas,
+$\Theta(N^2)$ para um tabuleiro $N \times N$, e as medições confirmam: dobrar $N$ multiplica
+o tempo por cerca de quatro. Os oito tabuleiros fornecidos, de $40 \times 40$ a
+$1500 \times 1500$, foram resolvidos com 4 a 43 movimentos, o maior deles em 57 ms, e as
+respostas foram conferidas por uma segunda implementação, por busca exaustiva e pelo
+algoritmo de Dijkstra. O enunciado deixa em aberto de qual casa vem o dígito que define o
+pulo e qual dígito está escondido sob as letras C e S; mostra-se quanto cada escolha altera
+os resultados.
+\end{abstract}
+
+\input{secoes/01-introducao}
+\input{secoes/02-modelagem}
+\input{secoes/03-algoritmo}
+\input{secoes/04-eficiencia}
+\input{secoes/05-resultados}
+\input{secoes/06-conclusao}
+
+\begin{thebibliography}{1}
+\bibitem{cormen}
+Cormen, T. H.; Leiserson, C. E.; Rivest, R. L.; Stein, C.:
+\textbf{Introduction to Algorithms}. 3.\,ed. MIT Press, Cambridge, 2009.
+(Busca em largura: seção 22.2; algoritmo de Dijkstra: seção 24.3.)
+\end{thebibliography}
+
+\end{document}

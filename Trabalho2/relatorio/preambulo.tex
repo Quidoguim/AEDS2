@@ -1,0 +1,85 @@
+% =====================================================================
+% preambulo.tex: modelo fixo dos relatórios de AEDS2 (PUCRS)
+%
+% Para um novo trabalho: copie a pasta inteira, troque título e autor em
+% main.tex e reescreva as seções em secoes/. Este arquivo não precisa mudar.
+%
+% Compila com pdfLaTeX (padrão do Overleaf) e com XeLaTeX. O ramo \ifPDFTeX
+% escolhe as fontes de cada motor; o resto é igual.
+% =====================================================================
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[brazilian]{babel}
+\usepackage{amsmath}
+\ifPDFTeX
+  \usepackage{newtxtext,newtxmath}   % Times no texto e na matemática
+\else
+  % Fontes chamadas pelo nome do arquivo: funciona no XeLaTeX completo e no Tectonic.
+  \setmainfont{texgyretermes}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,
+    ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
+  \setmonofont{texgyrecursor}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,
+    ItalicFont=*-italic,BoldItalicFont=*-bolditalic,Scale=MatchLowercase]
+\fi
+
+% ---------------------------------------------------------------- página e texto
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\emergencystretch=1.5em
+
+\usepackage{enumitem}
+\setlist{itemsep=0.25em,topsep=0.3em}
+
+% ---------------------------------------------------------------- cores, figuras, gráficos
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+% ---------------------------------------------------------------- tabelas e legendas
+\usepackage{array}
+\renewcommand{\arraystretch}{1.2}
+\usepackage[font=small,labelfont=it,textfont=it,labelsep=endash,justification=centering]{caption}
+\captionsetup{skip=6pt}
+
+% ---------------------------------------------------------------- pseudo-código numerado
+% Linhas numeradas permitem citar "linha 7" no texto e ligar cada etapa à explicação.
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\floatname{algorithm}{Algoritmo}
+\algrenewcommand\algorithmicreturn{\textbf{devolve}}
+\algrenewtext{Function}[2]{\textbf{função} \textproc{#1}(#2)}
+\algrenewtext{EndFunction}{\textbf{fim função}}
+\algrenewtext{While}[1]{\textbf{enquanto} #1 \textbf{faça}}
+\algrenewtext{EndWhile}{\textbf{fim enquanto}}
+\algrenewtext{If}[1]{\textbf{se} #1 \textbf{então}}
+\algrenewtext{EndIf}{\textbf{fim se}}
+\algrenewtext{For}[1]{\textbf{para} #1 \textbf{faça}}
+\algrenewtext{ForAll}[1]{\textbf{para cada} #1 \textbf{faça}}
+\algrenewtext{EndFor}{\textbf{fim para}}
+
+% ---------------------------------------------------------------- PDF
+\usepackage[hidelinks]{hyperref}
+
+% ---------------------------------------------------------------- macros do modelo
+% \pendente{texto}: lembrete em vermelho para resolver antes de entregar.
+% Antes da entrega, procure por "pendente" nos arquivos .tex e apague todos.
+\newcommand{\pendente}[1]{\textcolor{red}{\textbf{[#1]}}}
+
+% \espacofigura{altura}{indicação}: caixa tracejada que reserva o lugar de uma figura
+% e diz o que desenhar. Quando a imagem existir, troque a chamada por
+% \includegraphics[width=0.9\linewidth]{figuras/arquivo}.
+\newcommand{\espacofigura}[2]{%
+  \begin{tikzpicture}
+    \node[draw=gray,dashed,rounded corners=2pt,text width=0.86\linewidth,
+          minimum height=#1,align=center,inner sep=6pt,font=\small\itshape]
+      {\textbf{Espaço para a figura}\\[3pt] #2};
+  \end{tikzpicture}}

@@ -1,0 +1,70 @@
+\section{Resultados}
+\label{sec:resultados}
+
+Aplicando o algoritmo da Seção~\ref{sec:algoritmo} aos oito casos de teste, com a leitura de
+origem e o dígito 0 sob o C (Seção~\ref{sec:duvidas}), obtêm-se os resultados da
+Tabela~\ref{tab:resultados}.
+
+\begin{table}[ht]
+  \centering
+  \caption{Resultados dos oito casos de teste. A coluna ``Casas retiradas'' conta as casas que
+  saíram da fila até a retirada de S, e o tempo é o melhor de 15 execuções.}
+  \label{tab:resultados}
+  \small
+  \begin{tabular}{|c|c|c|r|c|r|}
+    \hline
+    \textbf{Caso} & \textbf{$N$} & \textbf{Movimentos} & \textbf{Casas retiradas}
+      & \textbf{\% de $N^2$} & \textbf{Tempo (ms)}\\
+    \hline
+    caso40 & 40 & 4 & 425 & 26,6 & 0,02\\
+    \hline
+    caso80 & 80 & 6 & 4.483 & 70,0 & 0,40\\
+    \hline
+    caso100 & 100 & 8 & 8.596 & 86,0 & 0,78\\
+    \hline
+    caso150 & 150 & 11 & 20.863 & 92,7 & 1,92\\
+    \hline
+    caso200 & 200 & 9 & 15.483 & 38,7 & 1,50\\
+    \hline
+    caso400 & 400 & 19 & 92.523 & 57,8 & 8,79\\
+    \hline
+    caso800 & 800 & 43 & 597.282 & 93,3 & 57,24\\
+    \hline
+    caso1500 & 1500 & 34 & 375.230 & 16,7 & 36,30\\
+    \hline
+  \end{tabular}
+\end{table}
+
+Nenhum dos oito casos é impossível: em todos, S é alcançável a partir de C. O número de
+movimentos vai de 4 a 43, e o tabuleiro de maior lado, $1500 \times 1500$, foi resolvido em
+36~ms. O caso mais demorado é o 800, com 57~ms, porque nele a busca visita 93,3\% das casas
+antes de chegar a S (Seção~\ref{sec:casos-reais}).
+
+\subsection{Como os resultados foram conferidos}
+\label{sec:conferencia}
+
+Para não confiar em um único programa, os resultados foram conferidos de várias formas:
+
+\begin{itemize}
+  \item \textbf{Exemplo do enunciado.} O algoritmo dá 3 pulos, como o enunciado informa, e uma
+    busca exaustiva confirma que 2 pulos não bastam.
+  \item \textbf{Segunda implementação.} A busca foi escrita de novo, separadamente (casas
+    guardadas como números inteiros e fila em vetor), para que um erro do primeiro programa não
+    se repetisse igual na conferência. As duas dão a mesma resposta nos oito casos.
+  \item \textbf{Algoritmo de Dijkstra.} Um método diferente, com fila de prioridade, dá a
+    mesma distância nos casos até $400 \times 400$.
+  \item \textbf{Caminho legal.} Reconstruiu-se o caminho mínimo de cada caso e conferiu-se, pulo
+    a pulo, que todos obedecem à regra do pulo.
+  \item \textbf{Tabuleiros pequenos aleatórios.} Em 389 tabuleiros sorteados (com semente
+    fixa), a distância encontrada é atingível e uma busca exaustiva em profundidade limitada
+    não acha caminho menor.
+  \item \textbf{Casos de borda.} Tabuleiros construídos à mão testam o pulo padrão, um pulo
+    que só fecha dando a volta no toro e o dígito 9 em um tabuleiro $7 \times 7$ (pernas
+    maiores que o lado, o que testa o módulo). A saída ``impossível'' foi exercitada com um
+    tabuleiro sem solução, e a busca independente também não achou caminho.
+\end{itemize}
+
+Essas conferências mostram que o programa implementa corretamente a regra adotada. Elas não
+mostram que a regra é a pretendida pelo enunciado: isso depende das duas escolhas de leitura
+discutidas na Seção~\ref{sec:duvidas}, e a Tabela~\ref{tab:sensibilidade} mostra quanto elas
+pesam.

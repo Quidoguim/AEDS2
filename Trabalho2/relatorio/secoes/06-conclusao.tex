@@ -1,0 +1,80 @@
+\section{Conclusão}
+\label{sec:conclusao}
+
+O problema foi resolvido modelando-se o tabuleiro como um grafo implícito, com uma casa por vértice e
+um pulo por aresta, e usando busca em largura. A modelagem transformou ``menor número de
+movimentos'' em ``menor caminho em um grafo sem pesos'', problema para o qual a BFS é correta e
+custa $\Theta(N^2)$, o que é ótimo em ordem de grandeza. Os oito casos foram resolvidos, com 4
+a 43 movimentos e no máximo 57~ms, e os resultados foram conferidos de várias formas
+(Seção~\ref{sec:conferencia}). As medições confirmaram o custo quadrático: dobrar $N$ multiplica
+o tempo por cerca de 4 (Tabela~\ref{tab:crescimento}).
+
+A principal limitação deste trabalho não está no algoritmo, e sim na interpretação do
+enunciado. Não ficou decidido de qual casa vem o dígito do pulo, nem qual dígito está escondido
+sob as letras C e S, e sete dos oito casos mudam de resposta conforme essas escolhas
+(Tabela~\ref{tab:sensibilidade}). Por isso os números da Tabela~\ref{tab:resultados} valem para
+a leitura adotada. O próximo passo é esclarecer a regra com o professor; o algoritmo não
+muda, só a regra que calcula os pulos.
+
+\subsection{Melhorias possíveis}
+\label{sec:melhorias}
+
+Mesmo sendo ótimo em ordem de grandeza, o algoritmo pode ficar mais rápido por um fator
+constante. Duas melhorias foram implementadas e medidas, sempre conferindo que a resposta continua a
+mesma nos oito casos e no exemplo.
+
+\textbf{Parar ao descobrir S (versão B).} A BFS atribui a uma casa a sua distância definitiva
+no momento em que a descobre. Portanto não é preciso esperar S chegar ao início da fila para
+devolver a resposta, como é feito na linha~\ref{lin:teste}: basta testar ao inserir
+(linha~\ref{lin:insere}). Isso evita expandir as casas da última camada que ainda estão na fila
+antes de S. A versão B foi de 1,5 a 1,9 vez mais rápida que a original nos casos com $N \ge 100$
+(Tabela~\ref{tab:melhorias}).
+
+\textbf{Casas como inteiros e pulos sem alocação (versão C).} Na versão original, cada casa
+visitada aloca cerca de dez vetores pequenos: um par $(l, c)$ para entrar na fila e os 8 pares
+de deslocamento devolvidos por \textsc{Pulos}. A versão C, que também para ao descobrir S,
+guarda a casa como um único inteiro $l \times N + c$, usa um vetor de inteiros como fila e
+calcula os 8 pulos no próprio laço, sem criar objetos. Ela foi de 2,9 a 4,4 vezes mais rápida que
+a original. Acredita-se que o ganho venha de evitar as alocações e de acessar a memória de forma
+mais compacta, mas cada efeito não foi isolado.
+
+\begin{table}[ht]
+  \centering
+  \caption{Tempo das três versões, em ms (melhor de 15 execuções), e o quanto a versão original
+  (A) é mais lenta que as outras. Os dois menores casos ($N = 40$ e $N = 80$) ficam abaixo de 0,5~ms e
+  foram omitidos pelo ruído de medição. A medição é independente da Tabela~\ref{tab:resultados}, então a
+  versão A difere dela em alguns por cento.}
+  \label{tab:melhorias}
+  \small
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{$N$} & \textbf{A: original} & \textbf{B: para ao descobrir S}
+      & \textbf{C: inteiros e B} & \textbf{A / B} & \textbf{A / C}\\
+    \hline
+    100 & 0,75 & 0,39 & 0,17 & 1,9 & 4,4\\
+    \hline
+    150 & 1,94 & 1,09 & 0,48 & 1,8 & 4,0\\
+    \hline
+    200 & 1,36 & 0,75 & 0,34 & 1,8 & 4,0\\
+    \hline
+    400 & 8,77 & 5,12 & 2,43 & 1,7 & 3,6\\
+    \hline
+    800 & 57,95 & 38,26 & 16,39 & 1,5 & 3,5\\
+    \hline
+    1500 & 36,36 & 23,25 & 12,61 & 1,6 & 2,9\\
+    \hline
+  \end{tabular}
+\end{table}
+
+Duas outras ideias não foram implementadas. A primeira é a busca bidirecional, a partir de C e
+de S ao mesmo tempo. Aqui ela não é imediata: como o pulo depende da casa de onde se sai,
+andar para trás a partir de S exige saber quais casas chegam a cada casa, e isso obriga a montar
+o grafo inverso, que custa $\Theta(N^2)$ de tempo e até $8N^2$ entradas de memória. Não se sabe
+se o ganho compensaria esse custo; seria preciso medir. A segunda vale se o mesmo tabuleiro
+tivesse várias saídas: a exploração completa da Seção~\ref{sec:medicoes} já calcula a distância
+de C a todas as casas, então uma única busca responderia a todas.
+
+Por fim, o que mais pesou neste trabalho não foi o algoritmo, que é padrão, e sim a modelagem:
+decidir o que é vértice e o que é aresta, como tratar o toro e como lidar com o que o
+enunciado não diz. Foram essas decisões que definiram os resultados, e por isso buscou-se
+registrar cada uma com os seus motivos e com o quanto ela pesa.
