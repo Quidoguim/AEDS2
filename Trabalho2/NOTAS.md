@@ -1,15 +1,20 @@
 # Trabalho 2 — notas de trabalho
 
-Onde paramos, o que foi decidido e por quê. Última atualização: 30/09/2026.
+Onde paramos, o que foi decidido e por quê. Última atualização: 01/10/2026.
 
 ## Estado atual
 
 - **Implementação**: pronta e validada (`src/CavaloHiperpulos.java`).
 - **Verificação**: bateria completa passando (`src/ValidacaoHiperpulos.java`).
-- **Relatório**: rascunho completo em LaTeX em `relatorio/` (compila; 11 páginas). Seguiu a
-  checklist do feedback do Trabalho 1 (mais abaixo). As duas figuras estão prontas em TikZ
-  (`relatorio/figuras/*.tex`). Faltam um lembrete `\pendente` sobre a leitura do enunciado e a
-  data de entrega.
+- **Regra do pulo**: fechada, com o esclarecimento do professor de 01/10/2026 (dígito da casa
+  onde o cavalo está; em `C` o pulo é comum). O solver já fazia isso; nenhum número mudou. Ver
+  "Regra do pulo" abaixo.
+- **Relatório**: rascunho completo em LaTeX em `relatorio/`. Seguiu a checklist do feedback do
+  Trabalho 1 (mais abaixo). As duas figuras estão prontas em TikZ (`relatorio/figuras/*.tex`).
+  A edição de 01/10/2026 (regra do pulo tratada como parte do enunciado, sem tabela de
+  leituras alternativas) foi feita sem compilar: o Windows onde ela foi feita não tem LaTeX.
+  Compilar no Overleaf/Mac e conferir. Falta a data de entrega e baixar a nova versão do
+  enunciado (ver Pendências).
   Para o Overleaf: `relatorio-overleaf.zip` (gerado, fora do git) ou `relatorio/LEIA-ME.txt`.
 
 Para retomar:
@@ -27,9 +32,12 @@ por casa de uma execução para outra (as razões entre tamanhos não mudaram); 
 103 a 106 ns nas três execuções testadas.
 
 `MedicoesHiperpulos` (30/09/2026) não altera o solver: mede casas visitadas, tempo de
-exploração completa, duas variantes otimizadas (parada ao descobrir S; casas como inteiros) e a
-sensibilidade às duas ambiguidades do enunciado. Todo tempo é o melhor de 15 execuções.
-Ambiente das medições: Apple M2, 16 GB, macOS 26.7, Java 24.0.1.
+exploração completa e duas variantes otimizadas (parada ao descobrir S; casas como inteiros).
+Todo tempo é o melhor de 15 execuções. Ambiente das medições: Apple M2, 16 GB, macOS 26.7,
+Java 24.0.1. Em 01/10/2026 foi retirada a seção de sensibilidade às leituras alternativas;
+conferido num Windows que o resto da saída (exemplo, casas retiradas, casas alcançadas) é
+idêntico ao de `medicoes-referencia.txt`, que só perdeu essa seção. Os tempos desse arquivo
+continuam sendo os do Mac e não foram refeitos.
 
 ## Resultados
 
@@ -58,84 +66,32 @@ centésimos de segundo.
 O enunciado do Trabalho 2 **não exige recursão** (diferente do Trabalho 1), então a BFS é
 iterativa, com fila.
 
-### Regra do pulo: o que está estabelecido e o que não está
+### Regra do pulo
 
-O enunciado descreve o pulo só por uma figura (L para os dígitos 0, 1 e 2), sem fórmula.
+O enunciado descreve o pulo por uma figura (L para os dígitos 0, 1 e 2), sem fórmula. Regra
+adotada e usada em todo o projeto:
 
-**Estabelecido: o tamanho do L.** Na figura as pernas têm 2 e 1 passos (d=0), 3 e 2 (d=1) e
-4 e 3 (d=2); as casas em vermelho são o acréscimo de `d` casas em cada perna. Regra: **pernas
-`(1+d, 2+d)` nas 8 orientações** (`(±(1+d), ±(2+d))` e `(±(2+d), ±(1+d))`). Com `d = 0` cai no
-pulo normal de xadrez. O exemplo numérico do enunciado (**C → S em 3 pulos**) confere: a regra
-dá 3 pulos para **qualquer** dígito que esteja escondido sob o C.
+- **Tamanho do L**: na figura as pernas têm 2 e 1 passos (d=0), 3 e 2 (d=1) e 4 e 3 (d=2); as
+  casas em vermelho são o acréscimo de `d` casas em cada perna. Logo, **pernas `(1+d, 2+d)` nas
+  8 orientações** (`(±(1+d), ±(2+d))` e `(±(2+d), ±(1+d))`). Com `d = 0` cai no pulo normal de
+  xadrez. Vem da figura, não de confirmação do professor.
+- **De qual casa vem o dígito**: o da casa onde o cavalo **está**, não o da casa onde ele vai
+  chegar. Confirmado pelo professor (resposta repassada em 01/10/2026).
+- **Casa `C`**: o marcador cobre o dígito daquela casa, e o professor definiu que ali o tamanho
+  do pulo é **0**, ou seja, o primeiro pulo é um pulo comum de xadrez. A casa `S` não influi,
+  porque a busca termina ao chegar nela. Constante `CavaloHiperpulos.DIGITO_EM_C`.
+- O professor disse que vai incluir os dois esclarecimentos no enunciado e publicar a nova
+  versão no Moodle. O PDF em `enunciado/01-enunciado.pdf` ainda é o antigo (pendência 3b).
 
-Alternativas para as pernas, testadas no exemplo com o dígito sob o C variando de 0 a 9
-(refeito em 30/09/2026):
+O exemplo numérico do enunciado (**C → S em 3 pulos**) confere com essa regra. As duas outras
+famílias de pernas testadas, `(2, 1+d)`/`(1+d, 2)` e `(1, 2+d)`/`(2+d, 1)`, também dão 3 pulos
+no exemplo com o dígito 0 em `C`, então o exemplo não as distingue; a figura as descarta (a
+primeira daria pernas iguais, 2 e 2, para d=1, que não é um L; na segunda só uma perna
+cresce). O relatório traz isso na tabela `tab:hipoteses` de `02-modelagem.tex`.
 
-| Pernas | Pulos no exemplo | Leitura |
-| --- | --- | --- |
-| `(1+d, 2+d)` | 3 com todos os dígitos | adotada; bate com a figura |
-| `(2, 1+d)` ou `(1+d, 2)` | 3 com nove dos dez dígitos, 1 com o dígito 4 | o exemplo **não** as descarta; a figura sim (d=1 daria pernas iguais, 2 e 2, que não é um L) |
-| `(1, 2+d)` ou `(2+d, 1)` | 2, 3 ou 4 conforme o dígito | descartadas pela figura; a resposta dependeria do dígito |
-
-> **Correção de registro (30/09/2026).** Uma versão anterior desta tabela afirmava que
-> `(2, 1+d)` "dá 3 só para alguns dígitos" e que a leitura "o dígito do destino define o
-> pulo" deixava o tabuleiro "desconexo, sem solução, contradizendo o exemplo". Nenhuma das duas
-> afirmações se reproduz. A primeira está na tabela acima. A segunda é falsa: a leitura do
-> destino também dá 3 pulos no exemplo (ver abaixo). **Não repetir nenhuma das duas no
-> relatório.**
-
-**Não estabelecido: de qual casa vem o dígito.** Há duas leituras, e o exemplo do enunciado
-(3 pulos) é compatível com as duas:
-
-- **Origem (adotada)**: o dígito da casa onde o cavalo *está* define o pulo que ele dá.
-- **Destino**: o dígito da casa onde o cavalo vai *cair* define o pulo.
-
-Adotamos a de origem porque o enunciado diz que o número de cada casa "afeta o quanto o
-cavalo pode pular", e quem pula sai da casa em que está. É uma leitura do texto, não uma
-demonstração. A sensibilidade é grande (número de movimentos; `MedicoesHiperpulos` imprime a
-tabela, e o Python independente conferiu os casos 40 a 200 da leitura destino):
-
-| Caso | Origem, C=0 (adotada) | Origem, C qualquer | Destino, S=0 | Destino, S qualquer |
-| --- | --- | --- | --- | --- |
-| caso40 | 4 | 4 | 2 | 2 |
-| caso80 | 6 | 4 | 6 | 4 |
-| caso100 | 8 | 6 | 8 | 6 |
-| caso150 | 11 | 9 | 11 | 11 |
-| caso200 | 9 | 9 | 11 | 9 |
-| caso400 | 19 | 17 | 17 | 17 |
-| caso800 | 43 | 43 | 43 | 41 |
-| caso1500 | 34 | 34 | 34 | 34 |
-
-Só o caso1500 dá o mesmo resultado nas quatro combinações. **Isso precisa ser resolvido com
-o professor** (ou procurando respostas esperadas na página da disciplina, onde o enunciado diz
-que os casos de teste foram publicados) antes de tratar os números como definitivos. No
-relatório, a decisão deve aparecer como suposição explícita, com esta tabela.
-
-### O dígito escondido sob o C
-
-O marcador `C` cobriu o dígito original daquela casa, então o tamanho do primeiro pulo não
-está no arquivo. **Decisão: o primeiro pulo usa o dígito 0**, o "pulo normal de xadrez" que
-o próprio enunciado define como caso base — casa sem número visível, pulo padrão.
-
-Isso importa: a resposta de 5 dos 8 casos muda conforme a suposição.
-
-| Caso | dígito 0 (adotado) | união dos dígitos 0-9 | depende do dígito? |
-| --- | --- | --- | --- |
-| caso40 | 4 | 4 | sim (dígito 5 dá 6) |
-| caso80 | 6 | 4 | sim (dígito 6 dá 4) |
-| caso100 | 8 | 6 | sim |
-| caso150 | 11 | 9 | sim |
-| caso200 | 9 | 9 | não |
-| caso400 | 19 | 17 | sim |
-| caso800 | 43 | 43 | não |
-| caso1500 | 34 | 34 | não |
-
-A alternativa "união" trata o primeiro pulo como podendo ter qualquer tamanho, já que o
-dígito é desconhecido — responde "o menor número de movimentos possível entre todas as
-hipóteses", que é uma pergunta diferente. Para trocar, basta mudar `DIGITO_SUPOSTO_EM_C`
-para `UNIAO_DOS_DIGITOS` em `CavaloHiperpulos.java`; a bateria de verificação acompanha a
-constante sozinha. **Vale confirmar a intenção com o professor** — se ele disser outra
-coisa, é uma constante e rodar de novo.
+O relatório trata a regra como parte do enunciado, sem mencionar dúvida (decisão do usuário,
+01/10/2026): a tabela que comparava as leituras alternativas foi retirada do relatório, do
+código de medição e do arquivo de referência. Não reintroduzir.
 
 ## O que a verificação cobre
 
@@ -185,16 +141,17 @@ O que vale para o Trabalho 2, em resumo:
    (`02-criterios-avaliacao.pdf`) pesa, em ordem: Desenvolvimento 2,5; Algoritmos 2,0;
    Análise/Conclusão 2,0; Apresentação, Eficiência e Testes 1,0 cada; Figuras/Tabelas 0,5.
    **Eficiência vale só 1,0**: o que pesa é justificar decisões e a conclusão com melhorias.
-3. **Resolver a leitura do enunciado** (seção "Regra do pulo"): de qual casa vem o dígito e
-   qual dígito está sob `C`/`S`. Sete dos oito casos mudam de resposta conforme a escolha.
-   Perguntar ao professor ou procurar respostas esperadas na página da disciplina. Se a
-   leitura mudar, ajustar `relatorio/secoes/02-modelagem.tex` (Tabela 2 e texto), o Resumo, a
-   Tabela de resultados e os números do solver.
+3. ~~Resolver a leitura do enunciado~~ — **resolvido em 01/10/2026** (seção "Regra do pulo").
+   Solver e números intactos; relatório, README e CLAUDE.md ajustados.
+3b. **Baixar a nova versão do enunciado** que o professor vai publicar no Moodle e, se for
+   diferente de `enunciado/01-enunciado.pdf`, substituir (mesmo nome) e conferir se mais alguma
+   coisa mudou além dos dois esclarecimentos. Se o enunciado novo citar a regra com palavras
+   próprias, vale ecoar a formulação em `02-modelagem.tex`.
 4. ~~Figuras do relatório~~ — prontas em TikZ (`fig-pulos-em-L`, `fig-camadas-bfs`). Os 100
    pares dígito/distância da segunda foram conferidos por script contra o tabuleiro do enunciado
    e contra `medicoes-referencia.txt`. Falta só o usuário conferir se estão do seu gosto.
-5. **Antes de entregar**: resolver os `\pendente`, trocar `\today` por uma data fixa e conferir
-   o PDF contra a checklist "O que isso pede do relatório do Trabalho 2".
+5. **Antes de entregar**: trocar `\today` por uma data fixa e conferir o PDF contra a checklist
+   "O que o feedback do Trabalho 1 pede do relatório". Não restam lembretes `\pendente` no texto.
 
 ### Decisões do rascunho do relatório (30/09/2026)
 
@@ -206,8 +163,9 @@ O que vale para o Trabalho 2, em resumo:
   trabalho em dupla e pediu singular; foi explicado que o professor proíbe e o texto foi passado
   para a voz impessoal ("modela-se", "foi conferido"). Ao escrever novas seções, evitar também
   "nós".
-- **Afirmações que o relatório NÃO faz**, porque não se sustentam: que o exemplo do enunciado
-  descarta a leitura "dígito do destino"; que `(2, 1+d)` só funciona para alguns dígitos.
+- **Afirmação que o relatório NÃO faz**, porque não se sustenta: que o exemplo do enunciado
+  distingue as regras de perna (as três dão 3 pulos com o dígito 0 em `C`; quem decide é a
+  figura).
 - **Melhorias da Conclusão foram medidas**, não só propostas: parar ao descobrir S (1,5 a 1,9×) e
   casas como inteiros (2,9 a 4,4×). A busca bidirecional aparece como ideia não testada, com o
   motivo (exige o grafo inverso).

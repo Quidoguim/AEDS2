@@ -23,7 +23,7 @@ Trabalho2/
 ├── src/
 │   ├── CavaloHiperpulos.java            # solução: BFS no tabuleiro toroidal
 │   ├── ValidacaoHiperpulos.java         # bateria de verificação independente
-│   └── MedicoesHiperpulos.java          # casas visitadas, tempos, variantes e sensibilidade
+│   └── MedicoesHiperpulos.java          # casas visitadas, tempos e variantes otimizadas
 ├── relatorio/                           # relatório em LaTeX (Overleaf); preambulo.tex é o modelo fixo
 │   ├── main.tex
 │   ├── preambulo.tex
@@ -57,7 +57,7 @@ Tempo total ~9,1s. Vencedores completos e discussão no relatório ([`NumerosDec
 
 Tabuleiro toroidal (as bordas se encostam) com um dígito 0–9 em cada casa. O cavalo parte de `C` e precisa chegar a `S` no **menor número de movimentos**. O pulo é em L e o dígito da casa onde o cavalo está estica as duas pernas do L: dígito `d` → pernas `(1+d, 2+d)`, sendo `d = 0` o pulo normal de xadrez.
 
-Modelado como busca em largura (BFS) sobre um grafo implícito de N² casas, com as coordenadas em aritmética modular para dar a volta no toro. Como o marcador `C` cobriu o dígito daquela casa, o primeiro pulo usa o dígito 0 — ver [`NOTAS.md`](Trabalho2/NOTAS.md) para a justificativa e o quanto essa escolha pesa em cada caso.
+Modelado como busca em largura (BFS) sobre um grafo implícito de N² casas, com as coordenadas em aritmética modular para dar a volta no toro. Na casa `C` o tamanho do pulo é 0, ou seja, o primeiro pulo é um pulo comum de xadrez. Ver [`NOTAS.md`](Trabalho2/NOTAS.md) para a regra do pulo e as decisões de modelagem.
 
 | Caso | N | Movimentos | Tempo |
 | --- | --- | --- | --- |
@@ -76,9 +76,7 @@ javac CavaloHiperpulos.java && java CavaloHiperpulos      # resolve os 8 casos
 javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # bateria de verificação
 ```
 
-Duas leituras do enunciado são suposições, não fatos: qual dígito vale (o da casa onde o cavalo está, adotado, ou o da casa onde vai cair) e o dígito escondido sob o `C`. Só o `caso1500` dá a mesma resposta em todas as combinações, então vale confirmar com o professor.
-
-**Individual.** Relatório: rascunho completo em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ e um lembrete sobre a leitura do enunciado.
+**Individual.** Relatório: rascunho completo em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ. Faltam a data de entrega e conferir a nova versão do enunciado que o professor vai publicar no Moodle.
 
 
 ## Licença

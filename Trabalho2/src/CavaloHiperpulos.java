@@ -31,14 +31,10 @@ public class CavaloHiperpulos {
 
     public static final int MOVIMENTOS_DO_EXEMPLO = 3;
 
-    // O marcador C cobriu o dígito original daquela casa, então o tamanho do primeiro
-    // pulo não está no arquivo. O enunciado define o dígito 0 como "pulo normal de
-    // xadrez", que é a suposição adotada aqui: casa sem número visível, pulo padrão.
-    // Trocar por UNIAO_DOS_DIGITOS deixa o primeiro pulo assumir qualquer tamanho de 0 a
-    // 9 — ValidacaoHiperpulos mede quanto essa escolha muda cada caso de teste.
-    public static final int UNIAO_DOS_DIGITOS = -1;
-
-    public static final int DIGITO_SUPOSTO_EM_C = 0;
+    // O marcador C cobre o dígito daquela casa. Pelo enunciado, o dígito que define o
+    // tamanho do pulo é o da casa onde o cavalo está, e em C o tamanho do pulo é 0: o
+    // primeiro pulo é um pulo comum de xadrez.
+    public static final int DIGITO_EM_C = 0;
 
     public static void main(String[] args) throws IOException {
         autoTeste();
@@ -84,10 +80,6 @@ public class CavaloHiperpulos {
     }
 
     public static int menorNumeroDeMovimentos(char[][] tabuleiro) {
-        return menorNumeroDeMovimentos(tabuleiro, DIGITO_SUPOSTO_EM_C);
-    }
-
-    public static int menorNumeroDeMovimentos(char[][] tabuleiro, int digitoSupostoEmC) {
         int n = tabuleiro.length;
         int[] origem = localizar(tabuleiro, 'C');
         int[] destino = localizar(tabuleiro, 'S');
@@ -108,7 +100,7 @@ public class CavaloHiperpulos {
             }
 
             boolean naOrigem = atual[0] == origem[0] && atual[1] == origem[1];
-            for (int[] deslocamento : deslocamentosDisponiveis(tabuleiro, atual, naOrigem, digitoSupostoEmC)) {
+            for (int[] deslocamento : deslocamentosDisponiveis(tabuleiro, atual, naOrigem)) {
                 int novaLinha = Math.floorMod(atual[0] + deslocamento[0], n);
                 int novaColuna = Math.floorMod(atual[1] + deslocamento[1], n);
                 if (distancia[novaLinha][novaColuna] == -1) {
@@ -120,20 +112,9 @@ public class CavaloHiperpulos {
         return -1;
     }
 
-    private static int[][] deslocamentosDisponiveis(char[][] tabuleiro, int[] posicao, boolean naOrigem,
-            int digitoSupostoEmC) {
+    private static int[][] deslocamentosDisponiveis(char[][] tabuleiro, int[] posicao, boolean naOrigem) {
         if (naOrigem) {
-            if (digitoSupostoEmC != UNIAO_DOS_DIGITOS) {
-                return deslocamentosParaDigito(digitoSupostoEmC);
-            }
-            int[][] uniao = new int[80][];
-            int indice = 0;
-            for (int digito = 0; digito <= 9; digito++) {
-                for (int[] deslocamento : deslocamentosParaDigito(digito)) {
-                    uniao[indice++] = deslocamento;
-                }
-            }
-            return uniao;
+            return deslocamentosParaDigito(DIGITO_EM_C);
         }
         int digito = tabuleiro[posicao[0]][posicao[1]] - '0';
         return deslocamentosParaDigito(digito);

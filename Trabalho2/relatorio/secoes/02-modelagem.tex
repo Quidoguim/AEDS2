@@ -47,92 +47,35 @@ trocando qual perna vai na linha e qual vai na coluna, cada casa tem oito pulos 
 $(\pm(1 + d), \pm(2 + d))$ e $(\pm(2 + d), \pm(1 + d))$. Com $d = 0$ recupera-se o pulo
 normal de xadrez, como o enunciado pede.
 
-Essa leitura foi conferida no exemplo do enunciado, em que C chega a S em 3 pulos. Como o dígito
-da casa C está escondido pela letra, o exemplo foi executado com cada dígito possível, de 0 a 9,
-no lugar do C. Com pernas $(1 + d, 2 + d)$ o resultado é sempre 3 pulos. Também foram testadas
-duas outras regras, para ver se o exemplo e a figura as distinguem (Tabela~\ref{tab:hipoteses}).
+O dígito que vale é o da casa onde o cavalo está, e não o da casa onde ele vai chegar. Na casa C,
+onde o cavalo começa, o tamanho do pulo é 0, isto é, o primeiro pulo é um pulo comum de xadrez.
+A casa S não influi: o cavalo para ao chegar nela. Assim, cada casa tem um dígito que fixa as
+oito casas para onde o cavalo pode ir a partir dela, e é isso que define as arestas do grafo
+da Seção~\ref{sec:grafo}.
+
+Essa regra foi conferida no exemplo do enunciado, em que C chega a S em 3 pulos: com pernas
+$(1 + d, 2 + d)$ o resultado é exatamente 3 pulos. Também foram testadas duas outras regras para
+as pernas, para ver se o exemplo e a figura as distinguem (Tabela~\ref{tab:hipoteses}).
 
 \begin{table}[ht]
   \centering
-  \caption{Regras testadas para as pernas do L, com o dígito escondido sob o C variando de 0 a 9.}
+  \caption{Regras testadas para as pernas do L, no tabuleiro de exemplo, com o dígito 0 em C.}
   \label{tab:hipoteses}
   \small
   \begin{tabular}{|c|c|c|}
     \hline
     \textbf{Pernas para o dígito $d$} & \textbf{Pulos de C a S no exemplo} & \textbf{Compatível com a figura?}\\
     \hline
-    $(1 + d,\ 2 + d)$ & 3, com todos os dígitos & sim\\
+    $(1 + d,\ 2 + d)$ & 3 & sim\\
     \hline
-    $(2,\ 1 + d)$ ou $(1 + d,\ 2)$ & 3 com nove dígitos, 1 com o dígito 4 & não\\
+    $(2,\ 1 + d)$ ou $(1 + d,\ 2)$ & 3 & não\\
     \hline
-    $(1,\ 2 + d)$ ou $(2 + d,\ 1)$ & 2, 3 ou 4, conforme o dígito & não\\
-    \hline
-  \end{tabular}
-\end{table}
-
-A segunda regra não é descartada pelo exemplo, mas é descartada pela figura: para $d = 1$
-ela daria pernas iguais, 2 e 2, que não formam um L. Na terceira, só uma perna cresce, o que
-também contraria a figura, e o resultado no exemplo dependeria do dígito escondido. Só a
-primeira regra é compatível com a figura e com o exemplo para qualquer dígito.
-
-\subsection{Duas dúvidas de interpretação}
-\label{sec:duvidas}
-
-O texto do enunciado e o exemplo não resolvem dois pontos, e para cada um é preciso escolher
-uma leitura.
-
-\textbf{De qual casa vem o dígito.} O enunciado diz que o número de cada casa afeta o quanto
-o cavalo pode pular. Adota-se a leitura mais direta: o cavalo usa o dígito da casa em que está
-(leitura de \emph{origem}). A leitura alternativa, em que vale o dígito da casa onde ele vai
-cair (leitura de \emph{destino}), também é compatível com o enunciado e também dá 3 pulos no
-exemplo. Portanto o exemplo não serve para escolher entre as duas.
-
-\textbf{O dígito escondido.} Nos arquivos, as letras C e S ocupam o lugar de um dígito, que se
-perdeu. Na leitura de origem, isso afeta o primeiro pulo, que sai da casa C; a casa S não
-importa, porque o cavalo para ao chegar nela. Como o enunciado define o dígito 0 como o pulo
-normal de xadrez, supõe-se o dígito 0 sob o C, isto é, o primeiro pulo é um pulo normal de
-cavalo. Na leitura de destino, o dígito escondido que importa é o de S, e faz-se a mesma
-suposição.
-
-\textbf{Quanto isso importa.} A Tabela~\ref{tab:sensibilidade} mostra o resultado de cada caso
-nas quatro combinações: leitura de origem ou de destino, com o dígito escondido valendo 0 ou
-sendo qualquer dígito de 0 a 9 (nesse caso, toma-se o menor resultado entre os dez). Só o
-caso 1500 dá o mesmo resultado nas quatro combinações; nos outros sete, a resposta depende da
-escolha.
-
-\begin{table}[ht]
-  \centering
-  \caption{Menor número de movimentos de cada caso, segundo a leitura do enunciado e o dígito
-  escondido. A primeira coluna é a leitura adotada neste relatório.}
-  \label{tab:sensibilidade}
-  \small
-  \begin{tabular}{|c|c|c|c|c|}
-    \hline
-    & \multicolumn{2}{c|}{\textbf{Leitura de origem}} & \multicolumn{2}{c|}{\textbf{Leitura de destino}}\\
-    \cline{2-5}
-    \textbf{Caso} & \textbf{C = 0 (adotada)} & \textbf{C qualquer} & \textbf{S = 0} & \textbf{S qualquer}\\
-    \hline
-    40 & 4 & 4 & 2 & 2\\
-    \hline
-    80 & 6 & 4 & 6 & 4\\
-    \hline
-    100 & 8 & 6 & 8 & 6\\
-    \hline
-    150 & 11 & 9 & 11 & 11\\
-    \hline
-    200 & 9 & 9 & 11 & 9\\
-    \hline
-    400 & 19 & 17 & 17 & 17\\
-    \hline
-    800 & 43 & 43 & 43 & 41\\
-    \hline
-    1500 & 34 & 34 & 34 & 34\\
+    $(1,\ 2 + d)$ ou $(2 + d,\ 1)$ & 3 & não\\
     \hline
   \end{tabular}
 \end{table}
 
-Por isso os números deste relatório são apresentados como os da leitura de origem com o dígito 0,
-e a dependência fica registrada. Se o enunciado for esclarecido, o algoritmo da
-Seção~\ref{sec:algoritmo} não muda: muda apenas a regra que diz para onde cada casa leva.
-\pendente{Confirmar com o professor qual leitura vale. Se mudar, ajustar esta seção, o Resumo
-e a Tabela~\ref{tab:resultados}.}
+As três regras dão 3 pulos no exemplo, de modo que o exemplo não as distingue; quem decide é a
+figura. A segunda daria, para $d = 1$, pernas iguais, 2 e 2, que não formam um L. Na terceira
+só uma perna cresce, o que também contraria a figura. Só a primeira regra é compatível com a
+figura, e é a adotada.

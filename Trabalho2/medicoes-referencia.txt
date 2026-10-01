@@ -4,7 +4,6 @@
 # Os tempos variam alguns por cento entre execuções; os números do relatório vêm desta.
 
 Variantes conferidas contra o solver: exemplo e os 8 casos.
-Exemplo do enunciado confere (3 pulos) nas duas leituras do pulo.
 
 == Exemplo do enunciado (10x10) ==
 C = (1,8)   S = (6,0)   menor caminho = 3 pulos
@@ -65,19 +64,3 @@ C = B com casas codificadas como linha*N+coluna e pulos sem alocar vetores
 | caso400 | 400 | 8,77 | 5,12 | 2,43 | 1,7x | 3,6x |
 | caso800 | 800 | 57,95 | 38,26 | 16,39 | 1,5x | 3,5x |
 | caso1500 | 1500 | 36,36 | 23,25 | 12,61 | 1,6x | 2,9x |
-
-== Sensibilidade às ambiguidades do enunciado (movimentos) ==
-Origem  = o dígito da casa onde o cavalo está define o pulo (leitura adotada)
-Destino = o dígito da casa onde o cavalo vai cair define o pulo
-Dígito escondido: sob o C na leitura Origem, sob o S na leitura Destino; 0 = pulo normal, qualquer = o menor resultado entre os dígitos 0 a 9
-| Caso | Origem, C=0 (adotada) | Origem, C qualquer | Destino, S=0 | Destino, S qualquer | Todas iguais? |
-| --- | --- | --- | --- | --- | --- |
-| caso40 | 4 | 4 | 2 | 2 | não |
-| caso80 | 6 | 4 | 6 | 4 | não |
-| caso100 | 8 | 6 | 8 | 6 | não |
-| caso150 | 11 | 9 | 11 | 11 | não |
-| caso200 | 9 | 9 | 11 | 9 | não |
-| caso400 | 19 | 17 | 17 | 17 | não |
-| caso800 | 43 | 43 | 43 | 41 | não |
-| caso1500 | 34 | 34 | 34 | 34 | sim |
-

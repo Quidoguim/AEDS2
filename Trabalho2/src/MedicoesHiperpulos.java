@@ -12,9 +12,7 @@ import java.util.function.IntSupplier;
 //   2. por caso: quantas casas a BFS retira da fila até chegar a S;
 //   3. exploração completa (sem parar em S): mostra que o custo cresce com N², que é o
 //      comportamento de pior caso e não depende de onde S está;
-//   4. variantes do solver: parada ao descobrir S e casas codificadas como inteiros;
-//   5. sensibilidade às duas ambiguidades do enunciado: de qual casa vem o dígito do pulo
-//      (onde o cavalo está ou onde vai cair) e qual dígito está escondido sob C ou sob S.
+//   4. variantes do solver: parada ao descobrir S e casas codificadas como inteiros.
 //
 // Todo tempo é o melhor de REPETICOES execuções na mesma JVM. Em uma execução só, as
 // primeiras passadas pagam a compilação JIT e o tempo de casos pequenos vira ruído.
@@ -27,18 +25,10 @@ public class MedicoesHiperpulos {
 
     private static final int REPETICOES = 15;
 
-    // Dígito escondido "qualquer": o pulo é liberado para todos os dígitos de 0 a 9.
-    private static final int UNIAO = CavaloHiperpulos.UNIAO_DOS_DIGITOS;
-    private static final int OCULTO = -1;
-
     // Acumula os resultados medidos para a JIT não descartar as chamadas como código morto.
     private static long sumidouro;
 
     public static void main(String[] args) throws IOException {
-        if (CavaloHiperpulos.DIGITO_SUPOSTO_EM_C == CavaloHiperpulos.UNIAO_DOS_DIGITOS) {
-            throw new IllegalStateException("As variantes medidas aqui supõem um dígito fixo sob o C");
-        }
-
         String[] nomes = CavaloHiperpulos.CASOS;
         char[][][] tabuleiros = new char[nomes.length][][];
         for (int i = 0; i < nomes.length; i++) {
@@ -53,7 +43,6 @@ public class MedicoesHiperpulos {
         imprimirPorCaso(nomes, tabuleiros);
         imprimirExploracaoCompleta(nomes, tabuleiros);
         imprimirVariantes(nomes, tabuleiros);
-        imprimirSensibilidade(nomes, tabuleiros);
 
         if (sumidouro == Long.MIN_VALUE) {
             System.out.println();
@@ -68,17 +57,8 @@ public class MedicoesHiperpulos {
         for (int i = 0; i < tabuleiros.length; i++) {
             conferir(CavaloHiperpulos.CASOS[i], tabuleiros[i]);
         }
-        // O enunciado informa 3 pulos no exemplo: as duas leituras do pulo precisam respeitar isso.
-        for (int digitoEmS : new int[]{0, UNIAO}) {
-            int obtido = comDigitoDoDestino(exemplo, digitoEmS);
-            if (obtido != CavaloHiperpulos.MOVIMENTOS_DO_EXEMPLO) {
-                throw new IllegalStateException("Leitura 'destino' (S=" + digitoEmS + ") dá " + obtido
-                        + " no exemplo, esperado " + CavaloHiperpulos.MOVIMENTOS_DO_EXEMPLO);
-            }
-        }
         System.out.println("Variantes conferidas contra o solver: exemplo e os "
                 + tabuleiros.length + " casos.");
-        System.out.println("Exemplo do enunciado confere (3 pulos) nas duas leituras do pulo.");
         System.out.println();
     }
 
@@ -218,30 +198,6 @@ public class MedicoesHiperpulos {
         System.out.println();
     }
 
-    private static void imprimirSensibilidade(String[] nomes, char[][][] tabuleiros) {
-        System.out.println("== Sensibilidade às ambiguidades do enunciado (movimentos) ==");
-        System.out.println("Origem  = o dígito da casa onde o cavalo está define o pulo (leitura adotada)");
-        System.out.println("Destino = o dígito da casa onde o cavalo vai cair define o pulo");
-        System.out.println("Dígito escondido: sob o C na leitura Origem, sob o S na leitura Destino;"
-                + " 0 = pulo normal, qualquer = o menor resultado entre os dígitos 0 a 9");
-        System.out.println("| Caso | Origem, C=0 (adotada) | Origem, C qualquer | Destino, S=0 | Destino, S qualquer | Todas iguais? |");
-        System.out.println("| --- | --- | --- | --- | --- | --- |");
-        for (int i = 0; i < nomes.length; i++) {
-            char[][] t = tabuleiros[i];
-            int[] valores = {
-                CavaloHiperpulos.menorNumeroDeMovimentos(t, 0),
-                CavaloHiperpulos.menorNumeroDeMovimentos(t, UNIAO),
-                comDigitoDoDestino(t, 0),
-                comDigitoDoDestino(t, UNIAO),
-            };
-            boolean iguais = Arrays.stream(valores).distinct().count() == 1;
-            System.out.printf("| %s | %s | %s | %s | %s | %s |%n", nomes[i].replace(".txt", ""),
-                    textoMovimentos(valores[0]), textoMovimentos(valores[1]),
-                    textoMovimentos(valores[2]), textoMovimentos(valores[3]), iguais ? "sim" : "não");
-        }
-        System.out.println();
-    }
-
     private static String textoMovimentos(int movimentos) {
         return movimentos == -1 ? "impossível" : String.valueOf(movimentos);
     }
@@ -320,7 +276,7 @@ public class MedicoesHiperpulos {
 
     private static int digitoDaCasa(char[][] tabuleiro, int[] casa, int[] origem) {
         if (casa[0] == origem[0] && casa[1] == origem[1]) {
-            return CavaloHiperpulos.DIGITO_SUPOSTO_EM_C;
+            return CavaloHiperpulos.DIGITO_EM_C;
         }
         return tabuleiro[casa[0]][casa[1]] - '0';
     }
@@ -426,7 +382,7 @@ public class MedicoesHiperpulos {
                 int casa = linha * n + coluna;
                 if (simbolo == 'C') {
                     origem = casa;
-                    digitos[casa] = (byte) CavaloHiperpulos.DIGITO_SUPOSTO_EM_C;
+                    digitos[casa] = (byte) CavaloHiperpulos.DIGITO_EM_C;
                 } else if (simbolo == 'S') {
                     destino = casa;
                 } else {
@@ -464,77 +420,6 @@ public class MedicoesHiperpulos {
                         return distancia[nova];
                     }
                     fila[fim++] = nova;
-                }
-            }
-        }
-        return -1;
-    }
-
-    // Leitura alternativa do enunciado: quem define o tamanho do pulo é o dígito da casa onde
-    // o cavalo vai cair. O pulo X -> Y existe se Y fica a (±(1+dY), ±(2+dY)) de X (ou trocando as
-    // pernas), com dY o dígito de Y. Como o dígito de Y é que decide, a busca testa os dez
-    // tamanhos de pulo a partir de cada casa e só aceita os que caem em uma casa com aquele dígito.
-    // O dígito escondido sob S (a última casa do caminho) é digitoEmS, ou UNIAO para qualquer um.
-    private static int comDigitoDoDestino(char[][] tabuleiro, int digitoEmS) {
-        int n = tabuleiro.length;
-        int total = n * n;
-
-        byte[] digitos = new byte[total];
-        int origem = -1;
-        int destino = -1;
-        for (int linha = 0; linha < n; linha++) {
-            for (int coluna = 0; coluna < n; coluna++) {
-                char simbolo = tabuleiro[linha][coluna];
-                int casa = linha * n + coluna;
-                if (simbolo == 'C') {
-                    origem = casa;
-                    digitos[casa] = OCULTO;
-                } else if (simbolo == 'S') {
-                    destino = casa;
-                    digitos[casa] = OCULTO;
-                } else {
-                    digitos[casa] = (byte) (simbolo - '0');
-                }
-            }
-        }
-
-        int[] distancia = new int[total];
-        Arrays.fill(distancia, -1);
-        int[] fila = new int[total];
-        int inicio = 0;
-        int fim = 0;
-        distancia[origem] = 0;
-        fila[fim++] = origem;
-
-        while (inicio < fim) {
-            int atual = fila[inicio++];
-            int linha = atual / n;
-            int coluna = atual % n;
-            for (int digito = 0; digito <= 9; digito++) {
-                int pernaCurta = 1 + digito;
-                int pernaLonga = 2 + digito;
-                for (int orientacao = 0; orientacao < 8; orientacao++) {
-                    boolean longaNaLinha = (orientacao & 4) != 0;
-                    int pernaLinha = longaNaLinha ? pernaLonga : pernaCurta;
-                    int pernaColuna = longaNaLinha ? pernaCurta : pernaLonga;
-                    int sinalLinha = (orientacao & 1) == 0 ? 1 : -1;
-                    int sinalColuna = (orientacao & 2) == 0 ? 1 : -1;
-                    int novaLinha = Math.floorMod(linha + sinalLinha * pernaLinha, n);
-                    int novaColuna = Math.floorMod(coluna + sinalColuna * pernaColuna, n);
-                    int nova = novaLinha * n + novaColuna;
-                    if (distancia[nova] != -1) {
-                        continue;
-                    }
-                    boolean pulaAqui = nova == destino
-                            ? digitoEmS == UNIAO || digitoEmS == digito
-                            : digitos[nova] == digito;
-                    if (pulaAqui) {
-                        distancia[nova] = distancia[atual] + 1;
-                        if (nova == destino) {
-                            return distancia[nova];
-                        }
-                        fila[fim++] = nova;
-                    }
                 }
             }
         }

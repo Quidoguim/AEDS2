@@ -8,9 +8,9 @@ import java.util.Random;
 // justamente para que um erro no solver não se repita igual na conferência.
 public class ValidacaoHiperpulos {
 
-    // Convenção em vigor no solver para o dígito escondido sob o C: tudo aqui é conferido
-    // sob ela, e validarSensibilidadeDoDigitoDeC mede o efeito de trocá-la.
-    private static final int CONVENCAO = CavaloHiperpulos.DIGITO_SUPOSTO_EM_C;
+    // Tamanho do pulo na casa C, segundo o enunciado (pulo comum de xadrez). Repetido aqui
+    // de propósito, em vez de lido do solver, para a conferência ser independente dele.
+    private static final int DIGITO_EM_C = 0;
 
     private static int falhas = 0;
 
@@ -21,7 +21,6 @@ public class ValidacaoHiperpulos {
         validarContraBuscaExaustiva();
         procurarTabuleiroSemSolucao();
         validarCasosReais();
-        validarSensibilidadeDoDigitoDeC();
 
         System.out.println();
         if (falhas > 0) {
@@ -79,15 +78,9 @@ public class ValidacaoHiperpulos {
         conferir("solver bate com a resposta do enunciado",
                 CavaloHiperpulos.menorNumeroDeMovimentos(exemplo) == esperado);
         conferir("busca independente bate com a resposta do enunciado",
-                distancia(exemplo, CONVENCAO) == esperado);
+                distancia(exemplo) == esperado);
         conferir("busca exaustiva confirma que não dá em menos de " + esperado,
                 !alcancaEm(exemplo, esperado - 1) && alcancaEm(exemplo, esperado));
-
-        boolean invariante = true;
-        for (int digito = 0; digito <= 9; digito++) {
-            invariante &= distancia(exemplo, digito) == esperado;
-        }
-        conferir("resposta não muda qualquer que seja o dígito suposto sob o C (0-9)", invariante);
 
         int[] caminho = caminhoOtimo(exemplo);
         conferir("caminho reconstruído tem " + esperado + " pulos e todos são legais",
@@ -184,7 +177,7 @@ public class ValidacaoHiperpulos {
             System.out.println("         o ramo \"impossível\" segue como defesa, previsto pelo próprio enunciado.");
         } else {
             conferir("tabuleiro sem solução encontrado: busca independente também devolve -1",
-                    distancia(semSolucao, CONVENCAO) == -1);
+                    distancia(semSolucao) == -1);
             conferir("busca exaustiva até 6 pulos também não acha caminho",
                     !alcancaEm(semSolucao, 6));
         }
@@ -196,7 +189,7 @@ public class ValidacaoHiperpulos {
             char[][] tabuleiro = CavaloHiperpulos.lerTabuleiro(CavaloHiperpulos.PASTA_CASOS.resolve(nomeArquivo));
 
             int doSolver = CavaloHiperpulos.menorNumeroDeMovimentos(tabuleiro);
-            int daBuscaIndependente = distancia(tabuleiro, CONVENCAO);
+            int daBuscaIndependente = distancia(tabuleiro);
             int[] caminho = caminhoOtimo(tabuleiro);
 
             conferir(nomeArquivo + ": solver e busca independente concordam (" + doSolver + ")",
@@ -208,31 +201,6 @@ public class ValidacaoHiperpulos {
                 conferir(nomeArquivo + ": Dijkstra (algoritmo diferente) dá a mesma distância",
                         distanciaPorDijkstra(tabuleiro) == doSolver);
             }
-        }
-    }
-
-    // Levantamento (não é teste): quanto a resposta de cada caso depende da suposição
-    // feita para o dígito que o marcador C cobriu. É a tabela que sustenta a escolha
-    // do modelo no relatório.
-    private static void validarSensibilidadeDoDigitoDeC() throws IOException {
-        System.out.println("\n== sensibilidade ao dígito escondido sob o C ==");
-        System.out.println("  (convenção em vigor: "
-                + (CONVENCAO == CavaloHiperpulos.UNIAO_DOS_DIGITOS ? "união dos dígitos" : "dígito " + CONVENCAO) + ")");
-
-        for (String nomeArquivo : CavaloHiperpulos.CASOS) {
-            char[][] tabuleiro = CavaloHiperpulos.lerTabuleiro(CavaloHiperpulos.PASTA_CASOS.resolve(nomeArquivo));
-
-            int[] porDigito = new int[10];
-            boolean todosIguais = true;
-            for (int digito = 0; digito <= 9; digito++) {
-                porDigito[digito] = distancia(tabuleiro, digito);
-                todosIguais &= porDigito[digito] == porDigito[0];
-            }
-
-            System.out.printf("  %-14s em vigor=%-3d união=%-3d dígitos 0-9=%s%s%n",
-                    nomeArquivo, distancia(tabuleiro, CONVENCAO),
-                    distancia(tabuleiro, CavaloHiperpulos.UNIAO_DOS_DIGITOS), Arrays.toString(porDigito),
-                    todosIguais ? "  (não depende do dígito)" : "  <- depende do dígito");
         }
     }
 
@@ -249,25 +217,15 @@ public class ValidacaoHiperpulos {
         };
     }
 
-    private static int[][] deslocamentosDaCasa(char[][] tabuleiro, int casa, boolean naOrigem, int digitoSupostoDeC) {
+    private static int[][] deslocamentosDaCasa(char[][] tabuleiro, int casa, boolean naOrigem) {
         int n = tabuleiro.length;
         if (naOrigem) {
-            if (digitoSupostoDeC != CavaloHiperpulos.UNIAO_DOS_DIGITOS) {
-                return deslocamentos(digitoSupostoDeC);
-            }
-            int[][] uniao = new int[80][];
-            int indice = 0;
-            for (int digito = 0; digito <= 9; digito++) {
-                for (int[] deslocamento : deslocamentos(digito)) {
-                    uniao[indice++] = deslocamento;
-                }
-            }
-            return uniao;
+            return deslocamentos(DIGITO_EM_C);
         }
         return deslocamentos(tabuleiro[casa / n][casa % n] - '0');
     }
 
-    private static int[] percorrer(char[][] tabuleiro, int digitoSupostoDeC, int[] anterior) {
+    private static int[] percorrer(char[][] tabuleiro, int[] anterior) {
         int n = tabuleiro.length;
         int origem = localizar(tabuleiro, 'C');
         int destino = localizar(tabuleiro, 'S');
@@ -289,7 +247,7 @@ public class ValidacaoHiperpulos {
             if (atual == destino) {
                 break;
             }
-            for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, atual, atual == origem, digitoSupostoDeC)) {
+            for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, atual, atual == origem)) {
                 int vizinho = Math.floorMod(atual / n + deslocamento[0], n) * n
                         + Math.floorMod(atual % n + deslocamento[1], n);
                 if (distancia[vizinho] == -1) {
@@ -304,14 +262,14 @@ public class ValidacaoHiperpulos {
         return distancia;
     }
 
-    private static int distancia(char[][] tabuleiro, int digitoSupostoDeC) {
-        return percorrer(tabuleiro, digitoSupostoDeC, null)[localizar(tabuleiro, 'S')];
+    private static int distancia(char[][] tabuleiro) {
+        return percorrer(tabuleiro, null)[localizar(tabuleiro, 'S')];
     }
 
     private static int[] caminhoOtimo(char[][] tabuleiro) {
         int n = tabuleiro.length;
         int[] anterior = new int[n * n];
-        int[] distancia = percorrer(tabuleiro, CONVENCAO, anterior);
+        int[] distancia = percorrer(tabuleiro, anterior);
         int destino = localizar(tabuleiro, 'S');
         if (distancia[destino] == -1) {
             return null;
@@ -338,7 +296,7 @@ public class ValidacaoHiperpulos {
         for (int passo = 0; passo + 1 < caminho.length; passo++) {
             int de = caminho[passo];
             boolean permitido = false;
-            for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, de, de == origem, CONVENCAO)) {
+            for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, de, de == origem)) {
                 int chegada = Math.floorMod(de / n + deslocamento[0], n) * n
                         + Math.floorMod(de % n + deslocamento[1], n);
                 if (chegada == caminho[passo + 1]) {
@@ -375,7 +333,7 @@ public class ValidacaoHiperpulos {
             if (atual == destino) {
                 return custo[atual];
             }
-            for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, atual, atual == origem, CONVENCAO)) {
+            for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, atual, atual == origem)) {
                 int vizinho = Math.floorMod(atual / n + deslocamento[0], n) * n
                         + Math.floorMod(atual % n + deslocamento[1], n);
                 if (custo[atual] + 1 < custo[vizinho]) {
@@ -401,7 +359,7 @@ public class ValidacaoHiperpulos {
             return false;
         }
         int n = tabuleiro.length;
-        for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, casa, casa == origem, CONVENCAO)) {
+        for (int[] deslocamento : deslocamentosDaCasa(tabuleiro, casa, casa == origem)) {
             int vizinho = Math.floorMod(casa / n + deslocamento[0], n) * n
                     + Math.floorMod(casa % n + deslocamento[1], n);
             if (alcancaEm(tabuleiro, vizinho, destino, origem, pulosRestantes - 1)) {

@@ -110,8 +110,8 @@ a resposta é $-1$, que o programa apresenta como ``impossível'' (linha~\ref{li
     $-2 \bmod 10$ dá $-2$, e não 8), e as coordenadas de chegada podem ficar negativas quando
     o pulo vai para cima ou para a esquerda. O \texttt{floorMod} devolve sempre um valor entre
     0 e $N - 1$.
-  \item \textbf{O dígito da casa C (linha~\ref{lin:digito}) vale 0}, conforme a suposição da
-    Seção~\ref{sec:duvidas}. A casa S nunca é expandida, porque o laço termina ao retirá-la.
+  \item \textbf{O dígito da casa C (linha~\ref{lin:digito}) vale 0}, conforme a regra do pulo
+    (Seção~\ref{sec:regra}). A casa S nunca é expandida, porque o laço termina ao retirá-la.
   \item \textbf{A busca termina ao retirar S da fila (linha~\ref{lin:teste}).} Poderia terminar
     antes, ao descobrir S; esse ganho foi medido na Seção~\ref{sec:conclusao}.
 \end{itemize}
@@ -149,7 +149,7 @@ $C(1, 8) \to (2, 6) \to (2, 7) \to S(6, 0)$, detalhado na Tabela~\ref{tab:trace}
   \end{tabular}
 \end{table}
 
-O primeiro pulo sai de C e, pela suposição da Seção~\ref{sec:duvidas}, é um pulo normal de
+O primeiro pulo sai de C e, pela regra da Seção~\ref{sec:regra}, é um pulo normal de
 cavalo. O segundo mostra o toro em ação: o dígito 9 dá pernas de 10 e 11, que em um tabuleiro
 de lado 10 equivalem a 0 e 1, e o cavalo chega à casa vizinha da direita. O terceiro sai pela
 borda direita (coluna 10) e entra pela esquerda (coluna 0), caindo em S. A

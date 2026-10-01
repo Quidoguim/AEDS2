@@ -1,9 +1,8 @@
 \section{Resultados}
 \label{sec:resultados}
 
-Aplicando o algoritmo da Seção~\ref{sec:algoritmo} aos oito casos de teste, com a leitura de
-origem e o dígito 0 sob o C (Seção~\ref{sec:duvidas}), obtêm-se os resultados da
-Tabela~\ref{tab:resultados}.
+Aplicando o algoritmo da Seção~\ref{sec:algoritmo} aos oito casos de teste, com a regra do
+pulo da Seção~\ref{sec:regra}, obtêm-se os resultados da Tabela~\ref{tab:resultados}.
 
 \begin{table}[ht]
   \centering
@@ -64,7 +63,6 @@ Para não confiar em um único programa, os resultados foram conferidos de vári
     tabuleiro sem solução, e a busca independente também não achou caminho.
 \end{itemize}
 
-Essas conferências mostram que o programa implementa corretamente a regra adotada. Elas não
-mostram que a regra é a pretendida pelo enunciado: isso depende das duas escolhas de leitura
-discutidas na Seção~\ref{sec:duvidas}, e a Tabela~\ref{tab:sensibilidade} mostra quanto elas
-pesam.
+Essas conferências mostram que o programa implementa corretamente a regra do pulo da
+Seção~\ref{sec:regra}. Como as implementações independentes seguem a mesma regra, elas testam a
+implementação, e não a interpretação do enunciado.
