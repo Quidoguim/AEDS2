@@ -25,7 +25,10 @@ todas as arestas custam 1. Três métodos clássicos foram considerados:
 
 Como o enunciado não exige recursão, a BFS é escrita com um laço e uma fila, e não com
 chamadas recursivas. Isso evita o limite da pilha e deixa o código mais direto: a própria fila
-guarda o que ainda falta visitar.
+guarda o que ainda falta visitar. A escolha da fila também importa: trocá-la por uma pilha, que
+retira primeiro a casa descoberta mais recentemente, transformaria o laço em uma DFS, e a
+primeira chegada a S deixaria de garantir o menor caminho. Com a fila, as casas saem na ordem
+em que foram descobertas, isto é, camada por camada.
 
 \subsection{O algoritmo}
 \label{sec:pseudocodigo}

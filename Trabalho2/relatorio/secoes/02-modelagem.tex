@@ -47,11 +47,12 @@ trocando qual perna vai na linha e qual vai na coluna, cada casa tem oito pulos 
 $(\pm(1 + d), \pm(2 + d))$ e $(\pm(2 + d), \pm(1 + d))$. Com $d = 0$ recupera-se o pulo
 normal de xadrez, como o enunciado pede.
 
-O dígito que vale é o da casa onde o cavalo está, e não o da casa onde ele vai chegar. Na casa C,
-onde o cavalo começa, o tamanho do pulo é 0, isto é, o primeiro pulo é um pulo comum de xadrez.
-A casa S não influi: o cavalo para ao chegar nela. Assim, cada casa tem um dígito que fixa as
-oito casas para onde o cavalo pode ir a partir dela, e é isso que define as arestas do grafo
-da Seção~\ref{sec:grafo}.
+O enunciado diz que vale o número da casa onde o cavalo está: um 0 nessa casa é o pulo normal
+de xadrez, e números maiores esticam o pulo. Portanto é o dígito da casa de partida de cada pulo
+que define o L, e não o da casa de chegada. A casa C não tem número, e o enunciado manda o cavalo
+sair dela com um pulo comum de xadrez, o que equivale ao dígito 0. A casa S não influi: o cavalo
+para ao chegar nela. Assim, cada casa tem um dígito que fixa as oito casas para onde o cavalo
+pode ir a partir dela, e é isso que define as arestas do grafo da Seção~\ref{sec:grafo}.
 
 Essa regra foi conferida no exemplo do enunciado, em que C chega a S em 3 pulos: com pernas
 $(1 + d, 2 + d)$ o resultado é exatamente 3 pulos. Também foram testadas duas outras regras para

@@ -13,8 +13,7 @@ Onde paramos, o que foi decidido e por quê. Última atualização: 01/10/2026.
   Trabalho 1 (mais abaixo). As duas figuras estão prontas em TikZ (`relatorio/figuras/*.tex`).
   A edição de 01/10/2026 (regra do pulo tratada como parte do enunciado, sem tabela de
   leituras alternativas) foi feita sem compilar: o Windows onde ela foi feita não tem LaTeX.
-  Compilar no Overleaf/Mac e conferir. Falta a data de entrega e baixar a nova versão do
-  enunciado (ver Pendências).
+  Compilar no Overleaf/Mac e conferir. A data do relatório está fixa em 11 de novembro de 2026.
   Para o Overleaf: `relatorio-overleaf.zip` (gerado, fora do git) ou `relatorio/LEIA-ME.txt`.
 
 Para retomar:
@@ -80,8 +79,8 @@ adotada e usada em todo o projeto:
 - **Casa `C`**: o marcador cobre o dígito daquela casa, e o professor definiu que ali o tamanho
   do pulo é **0**, ou seja, o primeiro pulo é um pulo comum de xadrez. A casa `S` não influi,
   porque a busca termina ao chegar nela. Constante `CavaloHiperpulos.DIGITO_EM_C`.
-- O professor disse que vai incluir os dois esclarecimentos no enunciado e publicar a nova
-  versão no Moodle. O PDF em `enunciado/01-enunciado.pdf` ainda é o antigo (pendência 3b).
+- Os dois esclarecimentos constam do enunciado novo (Moodle), que desde 02/10/2026 é o
+  `enunciado/01-enunciado.pdf`.
 
 O exemplo numérico do enunciado (**C → S em 3 pulos**) confere com essa regra. As duas outras
 famílias de pernas testadas, `(2, 1+d)`/`(1+d, 2)` e `(1, 2+d)`/`(2+d, 1)`, também dão 3 pulos
@@ -143,15 +142,17 @@ O que vale para o Trabalho 2, em resumo:
    **Eficiência vale só 1,0**: o que pesa é justificar decisões e a conclusão com melhorias.
 3. ~~Resolver a leitura do enunciado~~ — **resolvido em 01/10/2026** (seção "Regra do pulo").
    Solver e números intactos; relatório, README e CLAUDE.md ajustados.
-3b. **Baixar a nova versão do enunciado** que o professor vai publicar no Moodle e, se for
-   diferente de `enunciado/01-enunciado.pdf`, substituir (mesmo nome) e conferir se mais alguma
-   coisa mudou além dos dois esclarecimentos. Se o enunciado novo citar a regra com palavras
-   próprias, vale ecoar a formulação em `02-modelagem.tex`.
+3b. ~~Trocar pelo enunciado novo~~ — feito em 02/10/2026: `enunciado/01-enunciado.pdf` agora é
+   a versão nova do Moodle. A regra do pulo bate com o esclarecimento do professor e com o
+   solver ("casinha onde o cavalo está"; em C "pulo comum de xadrez"); tabuleiro de exemplo,
+   figura e resposta de 3 pulos idênticos aos da versão antiga.
 4. ~~Figuras do relatório~~ — prontas em TikZ (`fig-pulos-em-L`, `fig-camadas-bfs`). Os 100
    pares dígito/distância da segunda foram conferidos por script contra o tabuleiro do enunciado
    e contra `medicoes-referencia.txt`. Falta só o usuário conferir se estão do seu gosto.
-5. **Antes de entregar**: trocar `\today` por uma data fixa e conferir o PDF contra a checklist
-   "O que o feedback do Trabalho 1 pede do relatório". Não restam lembretes `\pendente` no texto.
+5. **Antes de entregar**: conferir o PDF compilado contra a checklist "O que o feedback do
+   Trabalho 1 pede do relatório". A data já está fixa (11 de novembro de 2026) e não restam
+   lembretes `\pendente` no texto. Auditoria de 02/10/2026: os 10 pontos da checklist foram
+   conferidos contra o texto; ver o commit "Fecha a revisão final do Trabalho 2".
 
 ### Decisões do rascunho do relatório (30/09/2026)
 

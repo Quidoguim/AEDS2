@@ -24,7 +24,7 @@ Trabalho 1 was delivered on 09/09/2026 and graded **6,5/10**. The professor's ha
 
 ## Trabalho 2 — O Cavalo e os Hiperpulos
 
-Constraints (from `Trabalho2/enunciado/01-enunciado.pdf`): find the minimum number of knight moves from `C` to `S` on a toroidal N×N board whose digits (0-9) set the jump size; individual work; same five report topics as Trabalho 1. **Recursion is not required here** — unlike Trabalho 1.
+Constraints (from `Trabalho2/enunciado/01-enunciado.pdf`): find the minimum number of knight moves from `C` to `S` on a toroidal N×N board whose digits (0-9) set the jump size; individual work; same five report topics as Trabalho 1. **Recursion is not required here** — unlike Trabalho 1. The PDF also says "IA não deve ser usada", but the professor replied (relayed by the user on 02/10/2026) that this was only a suggestion and that AI is allowed, including for code, tests and text revision, as long as the student understands the problem, the solution, the data and the conclusions. Keep explanations of what was done short and clear for that reason.
 
 The jump rule is settled; details and the pending items are in **`Trabalho2/NOTAS.md`**, the file to read before touching this assignment. Do not change it silently:
 
@@ -32,7 +32,7 @@ The jump rule is settled; details and the pending items are in **`Trabalho2/NOTA
 - **Whose digit sets the jump**: the digit of the cell the knight stands on, not the landing cell. Confirmed by the professor (answer relayed on 01/10/2026).
 - **Casa `C`**: the jump size there is 0, i.e. the first jump is an ordinary chess jump (`CavaloHiperpulos.DIGITO_EM_C`). Same confirmation. `S` never matters, the search stops on reaching it.
 
-**The user decided the report must treat this rule as part of the statement, as if the doubt never existed**: no mention of ambiguity, no table comparing alternative readings, no sensitivity analysis (all removed from the report, `MedicoesHiperpulos`, `ValidacaoHiperpulos`, `medicoes-referencia.txt` on 01/10/2026). Do not reintroduce them. The professor said he would publish a new version of the statement on Moodle; `Trabalho2/enunciado/01-enunciado.pdf` is still the old one until the user provides the new file (pending item 3b in `NOTAS.md`).
+**The user decided the report must treat this rule as part of the statement, as if the doubt never existed**: no mention of ambiguity, no table comparing alternative readings, no sensitivity analysis (all removed from the report, `MedicoesHiperpulos`, `ValidacaoHiperpulos`, `medicoes-referencia.txt` on 01/10/2026). Do not reintroduce them. `Trabalho2/enunciado/01-enunciado.pdf` is the new version of the statement published on Moodle (swapped in on 02/10/2026); its wording ("casinha onde o cavalo está", C leaves with "um pulo comum de xadrez") matches this rule.
 
 `ValidacaoHiperpulos.java` is a companion verification suite (independent reimplementation, cross-check against Dijkstra and exhaustive search, path legality, synthetic edge cases). Run it after any change to the solver. `MedicoesHiperpulos.java` produces the numbers for the report's efficiency analysis (visited cells, best-of-15 timings, two optimised variants) without touching the solver.
 

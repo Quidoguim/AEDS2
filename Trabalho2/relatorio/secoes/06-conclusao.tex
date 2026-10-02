@@ -29,7 +29,9 @@ de deslocamento devolvidos por \textsc{Pulos}. A versão C, que também para ao 
 guarda a casa como um único inteiro $l \times N + c$, usa um vetor de inteiros como fila e
 calcula os 8 pulos no próprio laço, sem criar objetos. Ela foi de 2,9 a 4,4 vezes mais rápida que
 a original. Acredita-se que o ganho venha de evitar as alocações e de acessar a memória de forma
-mais compacta, mas cada efeito não foi isolado.
+mais compacta, mas cada efeito não foi isolado. O preço é um código menos legível: os oito
+pulos saem de operações sobre bits do índice do laço, e não de uma lista de pares como no
+Algoritmo~\ref{alg:pulos}, e uma mudança na regra do pulo exigiria mexer nesse laço.
 
 \begin{table}[ht]
   \centering
