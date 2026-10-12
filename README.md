@@ -9,9 +9,7 @@ Trabalho1/
 ├── enunciado/                           # material fornecido pelo professor
 │   ├── 01-enunciado.pdf
 │   ├── 02-criterios-avaliacao.pdf
-│   ├── 03-exemplo-artigo-modelo.pdf
-│   ├── 04-exemplo-relatorio-anotado.pdf
-│   └── 05-feedback-professor-trabalho1.pdf   # só local (no .gitignore): correções e nota
+│   └── 03-exemplo-artigo-modelo.pdf
 └── src/
     └── NumerosDecompostos.java          # solução recursiva
 
@@ -30,7 +28,7 @@ Trabalho2/
 │   ├── secoes/
 │   └── figuras/
 ├── medicoes-referencia.txt              # saída de MedicoesHiperpulos usada no relatório
-└── NOTAS.md                             # decisões de modelagem, feedback do T1 e pendências
+└── NOTAS.md                             # decisões de modelagem e como reproduzir
 ```
 
 Cada `TrabalhoN/` traz o enunciado do professor em `enunciado/` (renomeado de forma clara) e a implementação em `src/`. Todo relatório precisa cobrir: problema, modelagem, processo de solução (com exemplos e algoritmos), resultados dos casos de teste e conclusões — ver rubrica e exemplos em `Trabalho1/enunciado/`.
@@ -51,7 +49,7 @@ Atalho usado: nº de decomposições de `n` = nº de divisores ímpares de `n` (
 | 1.000.000 – 1.500.000 | 96 | 2,716s |
 | 1.500.000 – 2.000.000 | 108 | 3,216s |
 
-Tempo total ~9,1s. Vencedores completos e discussão no relatório ([`NumerosDecompostos.java`](Trabalho1/src/NumerosDecompostos.java)). **Individual.** Entregue em 09/09/2026, nota 6,5/10.
+Tempo total ~9,1s. Vencedores completos e discussão no relatório ([`NumerosDecompostos.java`](Trabalho1/src/NumerosDecompostos.java)). **Individual.** Entregue em 09/09/2026.
 
 ## Trabalho 2 — O Cavalo e os Hiperpulos
 

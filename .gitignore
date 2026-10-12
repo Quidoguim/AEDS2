@@ -15,9 +15,11 @@ bin/
 # Arquivos temporários do Word/Office (criados enquanto o documento está aberto)
 ~$*.doc*
 
-# Feedback do professor com a nota (documento pessoal, fica só local)
+# Material pessoal e de terceiros (fica só local; o repositório é público)
+Trabalho1/enunciado/04-exemplo-relatorio-anotado.pdf
 Trabalho1/enunciado/05-feedback-professor-trabalho1.pdf
 Trabalho2/feedback-trabalho1-local.md
+CLAUDE.local.md
 
 # PDF do relatório do Trabalho 1 (cópia do .docx já versionado)
 Trabalho1/relatorio-trabalho1.pdf

@@ -30,7 +30,7 @@ Usar como modelo em outro trabalho
 ----------------------------------
 Copie esta pasta, apague o conteúdo de secoes/ e de figuras/, troque título e autor em main.tex
 e escreva as novas seções. Ao terminar cada seção, confira as cobranças do professor em
-Trabalho2/NOTAS.md (seção "O que o feedback do Trabalho 1 pede do relatório").
+Trabalho2/NOTAS.md (seção "Checklist de escrita").
 
 Compilar localmente (opcional)
 ------------------------------

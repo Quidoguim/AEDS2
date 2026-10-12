@@ -54,7 +54,7 @@ O enunciado descreve o tamanho do pulo por uma figura (L para os dígitos 0, 1 e
   8 orientações**. Com `d = 0` cai no pulo normal de xadrez. Para os dígitos 3 a 9, que a figura
   não mostra, o padrão é estendido; o relatório avisa isso (Seção 2.3 e Limitações).
 - **De qual casa vem o dígito**: o da casa onde o cavalo **está**, não o da casa onde ele vai
-  chegar. Esclarecido pelo professor em 01/10/2026 e presente no enunciado novo (Moodle).
+  chegar. Consta do enunciado atual.
 - **Casa `C`**: o marcador cobre o dígito daquela casa, e ali o tamanho do pulo é **0**: o
   primeiro pulo é um pulo comum de xadrez (`CavaloHiperpulos.DIGITO_EM_C`). A casa `S` não
   influi, porque a busca termina ao chegar nela.
