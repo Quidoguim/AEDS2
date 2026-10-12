@@ -19,8 +19,8 @@ import java.util.function.IntSupplier;
 //
 // Rodar com a heap fixa, para a JVM não redimensionar a memória no meio das medições:
 //   java -Xms2g -Xmx2g MedicoesHiperpulos
-// Com heap automática, o tempo absoluto da exploração completa oscilou em até 1,8x entre
-// execuções (55 a 105 ns por casa); com heap fixa ficou em 103 a 106 ns nas três que testamos.
+// O tempo absoluto da exploração completa oscila entre execuções (55 a 108 ns por casa nas que
+// fizemos, com heap automática e com heap fixa); as razões entre tamanhos não mudam.
 public class MedicoesHiperpulos {
 
     private static final int REPETICOES = 15;

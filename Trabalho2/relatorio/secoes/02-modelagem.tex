@@ -16,7 +16,7 @@ dada uma casa, calculam-se na hora as casas para onde ela leva, a partir do seu 
 evita guardar as arestas, que somam até $8N^2$ (18 milhões no maior tabuleiro).
 
 A busca em largura (BFS, do inglês \emph{breadth-first search}) resolve exatamente esse
-problema~\cite{cormen}. Ela visita as casas por camadas: primeiro a casa C, a distância 0;
+problema. Ela visita as casas por camadas: primeiro a casa C, a distância 0;
 depois todas as casas a 1 pulo de C; depois as casas a 2 pulos; e assim por diante. Uma fila
 garante essa ordem, porque as casas descobertas a partir da camada $k$ entram na fila depois
 de todas as casas da camada $k$, e portanto só são visitadas depois delas. Por isso, a
@@ -38,8 +38,9 @@ e chega à coluna seguinte: dá uma volta completa no tabuleiro e termina ao lad
 \subsection{A regra do pulo}
 \label{sec:regra}
 
-O enunciado não dá uma fórmula para o pulo, só a figura com os L dos dígitos 0, 1 e 2
-(Figura~\ref{fig:pulos}). Por isso é preciso extrair a regra da própria figura. Nela, o L do
+O enunciado diz que o pulo cresce com o dígito, mas não dá uma fórmula: o tamanho do L aparece
+só na figura, para os dígitos 0, 1 e 2 (Figura~\ref{fig:pulos}). Por isso é preciso extrair o
+tamanho do L da própria figura. Nela, o L do
 dígito 0 tem pernas de 2 e 1 casas, o do dígito 1 tem pernas de 3 e 2, e o do dígito 2 tem
 pernas de 4 e 3. As casas coloridas são o que foi acrescentado: para o dígito $d$, são $d$ casas
 em cada perna.

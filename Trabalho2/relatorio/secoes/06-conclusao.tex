@@ -9,6 +9,28 @@ a 43 movimentos e no máximo 57~ms, e os resultados foram conferidos de várias 
 (Seção~\ref{sec:conferencia}). As medições confirmaram o custo quadrático: dobrar $N$ multiplica
 o tempo por cerca de 4 (Tabela~\ref{tab:crescimento}).
 
+Os resultados trazem duas observações. A primeira é que o número de movimentos não cresce com o
+tamanho do tabuleiro: o caso 800 precisa de 43 movimentos e o caso 1500, de 34
+(Tabela~\ref{tab:resultados}). A distância depende de onde estão C e S e de quais dígitos
+aparecem no caminho, e não só de $N$, e isso se soma ao efeito de a busca parar em S para tornar
+o tempo de cada caso irregular (Seção~\ref{sec:casos-reais}). A segunda é que os tabuleiros são
+quase totalmente conectados: a exploração completa da Seção~\ref{sec:medicoes} alcança mais de
+99,9\% das casas em todos os casos, e por isso nenhum caso real deu ``impossível'', embora o
+algoritmo trate essa saída.
+
+\subsection{Limitações}
+\label{sec:limitacoes}
+
+Há três limites que convém ter presentes ao ler os resultados. O primeiro é a regra do pulo para
+os dígitos de 3 a 9: a figura do enunciado mostra apenas os dígitos 0, 1 e 2, e o padrão foi
+estendido aos demais (Seção~\ref{sec:regra}). A segunda implementação e as demais conferências
+(Seção~\ref{sec:conferencia}) seguem a mesma regra, de modo que testam o código, não essa
+extensão. O segundo é que as medições vêm de um único computador e de uma única versão da
+máquina virtual Java: o tempo absoluto variou entre execuções, e só as razões entre tamanhos são
+estáveis (Seção~\ref{sec:medicoes}). O terceiro é que o crescimento quadrático foi conferido
+apenas na faixa dos oito casos, de $N = 40$ a $N = 1500$; em tabuleiros bem maiores, o uso de
+memória pode passar a pesar mais que a contagem de operações.
+
 \subsection{Melhorias possíveis}
 \label{sec:melhorias}
 
@@ -61,13 +83,19 @@ Algoritmo~\ref{alg:pulos}, e uma mudança na regra do pulo exigiria mexer nesse 
   \end{tabular}
 \end{table}
 
-Duas outras ideias não foram implementadas. A primeira é a busca bidirecional, a partir de C e
+Três outras ideias não foram implementadas. A primeira é a busca bidirecional, a partir de C e
 de S ao mesmo tempo. Aqui ela não é imediata: como o pulo depende da casa de onde se sai,
 andar para trás a partir de S exige saber quais casas chegam a cada casa, e isso obriga a montar
 o grafo inverso, que custa $\Theta(N^2)$ de tempo e até $8N^2$ entradas de memória. Não se sabe
 se o ganho compensaria esse custo; seria preciso medir. A segunda vale se o mesmo tabuleiro
 tivesse várias saídas: a exploração completa da Seção~\ref{sec:medicoes} já calcula a distância
-de C a todas as casas, então uma única busca responderia a todas.
+de C a todas as casas, então uma única busca responderia a todas. A terceira reduz a memória: como a resposta só
+depende do número da camada em que S aparece, não é preciso guardar a distância de cada casa.
+A matriz $dist$ de inteiros poderia ser trocada por um vetor de bits que apenas marca as casas
+já descobertas, mais as listas das casas da camada atual e da seguinte. No maior tabuleiro isso
+troca cerca de 9~MB de inteiros por cerca de 280~KB de bits, mais as duas listas. Se a hipótese
+da Seção~\ref{sec:medicoes} sobre os caches estiver certa, isso também poderia reduzir a alta do
+tempo por casa nos tabuleiros grandes. Esta ideia não foi implementada nem medida.
 
 Por fim, o que mais pesou neste trabalho não foi o algoritmo, que é padrão, e sim a modelagem:
 decidir o que é vértice e o que é aresta, como tratar o toro e como extrair da figura do

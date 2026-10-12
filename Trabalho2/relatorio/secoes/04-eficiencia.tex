@@ -23,7 +23,7 @@ grafo tem $E \le 8N^2$ arestas.
 
 Somando, o laço principal faz no máximo $N^2 \times 8 \times c$ operações, para uma constante
 $c$, ou seja, $O(N^2)$. Em termos de vértices e arestas, é o custo $\Theta(V + E)$ conhecido da
-BFS~\cite{cormen}. Como a inicialização já custa $N^2$ em qualquer tabuleiro, o tempo do
+BFS. Como a inicialização já custa $N^2$ em qualquer tabuleiro, o tempo do
 algoritmo é $\Theta(N^2)$ sempre. O que muda de um tabuleiro para outro é a constante: quando S
 é encontrada cedo, a busca visita só parte das casas.
 
@@ -44,10 +44,11 @@ isola o efeito do tamanho do tabuleiro, sem depender de onde S está.
 
 As medições foram feitas em um Apple M2 com 16~GB de memória, macOS 26.7 e Java 24.0.1, sem contar a
 leitura do arquivo. Cada tempo é o melhor de 15 execuções na mesma JVM, o que descarta o custo de
-compilação das primeiras execuções e a interferência da coleta de lixo. Também se fixou o
-tamanho da memória da JVM (\texttt{-Xms2g -Xmx2g}): com tamanho automático, o tempo absoluto
-variou em até 1,8 vez de uma execução para outra, mas as razões entre tamanhos, que são o que
-se usa aqui, não mudaram.
+compilação das primeiras execuções e a interferência da coleta de lixo. O tamanho da
+memória da JVM foi fixado (\texttt{-Xms2g -Xmx2g}), mas mesmo assim o tempo absoluto por casa
+visitada variou de uma execução para outra, de cerca de 55 a 108~ns nas execuções feitas. As
+razões entre tamanhos, que são o que se usa aqui, praticamente não mudaram: de 800 para 1500,
+por exemplo, deu 3,6 em uma execução e 3,9 em outra, para 3,5 esperado.
 
 \begin{table}[ht]
   \centering

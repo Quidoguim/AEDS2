@@ -23,7 +23,7 @@ Antes de entregar
 - Procure por "pendente" (Ctrl+Shift+F no Overleaf) e resolva cada lembrete vermelho.
 - As figuras já estão prontas em TikZ (pasta figuras/; veja figuras/LEIA-ME.txt). Confira se
   estão do seu gosto e ajuste cores e rótulos direto nos arquivos .tex delas.
-- Troque \date{\today} em main.tex por uma data fixa.
+- Confira a data em main.tex (\date{...}); hoje está fixa em 11 de novembro de 2026.
 - Relatórios não levam capa: o título fica no topo da primeira página.
 
 Usar como modelo em outro trabalho
