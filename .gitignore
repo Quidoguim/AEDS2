@@ -19,6 +19,9 @@ bin/
 Trabalho1/enunciado/05-feedback-professor-trabalho1.pdf
 Trabalho2/feedback-trabalho1-local.md
 
+# PDF do relatório do Trabalho 1 (cópia do .docx já versionado)
+Trabalho1/relatorio-trabalho1.pdf
+
 # LaTeX: arquivos gerados na compilação, o zip de upload e o PDF de rascunho
 *.aux
 *.log

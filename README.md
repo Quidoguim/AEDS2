@@ -76,7 +76,7 @@ javac CavaloHiperpulos.java && java CavaloHiperpulos      # resolve os 8 casos
 javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # bateria de verificação
 ```
 
-**Individual.** Relatório: rascunho completo em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ. A data do relatório está fixa em 11 de novembro de 2026.
+**Individual.** Relatório: rascunho completo em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ. Trabalho concluído; entrega em 11 de novembro de 2026.
 
 
 ## Licença

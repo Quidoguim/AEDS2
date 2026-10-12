@@ -1,96 +1,69 @@
 # Trabalho 2 — notas de trabalho
 
-Onde paramos, o que foi decidido e por quê. Última atualização: 01/10/2026.
+Decisões de modelagem, o que a verificação cobre e como reproduzir os números do relatório.
+Última atualização: 12/10/2026.
 
 ## Estado atual
 
-- **Implementação**: pronta e validada (`src/CavaloHiperpulos.java`).
-- **Verificação**: bateria completa passando (`src/ValidacaoHiperpulos.java`).
-- **Regra do pulo**: fechada, com o esclarecimento do professor de 01/10/2026 (dígito da casa
-  onde o cavalo está; em `C` o pulo é comum). O solver já fazia isso; nenhum número mudou. Ver
-  "Regra do pulo" abaixo.
-- **Relatório**: rascunho completo em LaTeX em `relatorio/`. Seguiu a checklist do feedback do
-  Trabalho 1 (mais abaixo). As duas figuras estão prontas em TikZ (`relatorio/figuras/*.tex`).
-  A edição de 01/10/2026 (regra do pulo tratada como parte do enunciado, sem tabela de
-  leituras alternativas) foi feita sem compilar: o Windows onde ela foi feita não tem LaTeX.
-  Compilar no Overleaf/Mac e conferir. A data do relatório está fixa em 11 de novembro de 2026.
-  Para o Overleaf: `relatorio-overleaf.zip` (gerado, fora do git) ou `relatorio/LEIA-ME.txt`.
+**Concluído.** Entrega em 11/11/2026. Solver, verificação, medições e relatório em LaTeX estão
+prontos. Em 12/10/2026 o relatório foi compilado e conferido: 11 páginas, sem referências
+quebradas, e tabelas, gráfico e figuras batem com `medicoes-referencia.txt` e com o tabuleiro do
+enunciado. Não há pendências.
 
-Para retomar:
+Para reproduzir:
 
 ```bash
 cd Trabalho2/src
 javac CavaloHiperpulos.java && java CavaloHiperpulos       # resolve os 8 casos
-javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # confere tudo
+javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # confere tudo (50 verificações)
 javac MedicoesHiperpulos.java && java -Xms2g -Xmx2g MedicoesHiperpulos   # números do relatório (~1 min)
 ```
 
-A saída usada no relatório está salva em `medicoes-referencia.txt`. Heap fixa (`-Xms2g -Xmx2g`)
-porque, com heap automática, o tempo absoluto da exploração completa oscilou entre ~55 e ~105 ns
-por casa de uma execução para outra (as razões entre tamanhos não mudaram); com heap fixa deu
-103 a 106 ns nas três execuções testadas.
+Resultados (movimentos): caso40 = 4, caso80 = 6, caso100 = 8, caso150 = 11, caso200 = 9,
+caso400 = 19, caso800 = 43, caso1500 = 34. Nenhum caso deu "impossível". Os tempos estão em
+`medicoes-referencia.txt` (melhor de 15 execuções); os do README são de uma execução só.
 
-`MedicoesHiperpulos` (30/09/2026) não altera o solver: mede casas visitadas, tempo de
-exploração completa e duas variantes otimizadas (parada ao descobrir S; casas como inteiros).
-Todo tempo é o melhor de 15 execuções. Ambiente das medições: Apple M2, 16 GB, macOS 26.7,
-Java 24.0.1. Em 01/10/2026 foi retirada a seção de sensibilidade às leituras alternativas;
-conferido num Windows que o resto da saída (exemplo, casas retiradas, casas alcançadas) é
-idêntico ao de `medicoes-referencia.txt`, que só perdeu essa seção. Os tempos desse arquivo
-continuam sendo os do Mac e não foram refeitos.
+### Medições
 
-## Resultados
+`MedicoesHiperpulos` não altera o solver: conta casas visitadas, mede o custo da exploração
+completa (sem parar em S) e compara duas variantes (parar ao descobrir S; casas como inteiros).
+A saída usada no relatório está em `medicoes-referencia.txt` (Apple M2, 16 GB, macOS 26.7,
+Java 24.0.1, heap fixa `-Xms2g -Xmx2g`).
 
-| Caso | N | Movimentos | Tempo |
-| --- | --- | --- | --- |
-| caso40 | 40 | 4 | 0,001s |
-| caso80 | 80 | 6 | 0,004s |
-| caso100 | 100 | 8 | 0,005s |
-| caso150 | 150 | 11 | 0,006s |
-| caso200 | 200 | 9 | 0,004s |
-| caso400 | 400 | 19 | 0,014s |
-| caso800 | 800 | 43 | 0,073s |
-| caso1500 | 1500 | 34 | 0,033s |
-
-Nenhum caso deu "impossível". Os tempos não crescem de forma monótona com N porque a BFS
-para assim que alcança `S`: quanto mais perto a saída, menos tabuleiro é explorado.
+O tempo **absoluto** da exploração completa varia entre execuções: 88 a 108 ns por casa na
+referência e 56 a 76 ns numa nova execução com heap fixa em 11/10/2026 (macOS 27.0.1). Os demais
+números (movimentos, casas, razões entre tamanhos, faixas de A/B e A/C) reproduzem. Por isso o
+relatório diz que o absoluto varia e que só as razões são estáveis.
 
 ## Modelagem
 
-**Grafo implícito**: cada casa do tabuleiro é um vértice; cada pulo permitido é uma aresta
-de peso 1. Menor número de movimentos = menor caminho em grafo não ponderado, ou seja, BFS.
-O toro entra só na hora de calcular o destino do pulo, com `Math.floorMod` nas duas
-coordenadas. Custo O(N²) numa única passada; N=1500 (2,25 milhões de casas) resolve em
-centésimos de segundo.
+**Grafo implícito**: cada casa do tabuleiro é um vértice; cada pulo permitido é uma aresta de
+peso 1. Menor número de movimentos = menor caminho em grafo não ponderado, ou seja, BFS. O toro
+entra só na hora de calcular o destino do pulo, com `Math.floorMod` nas duas coordenadas. Custo
+Θ(N²); N=1500 (2,25 milhões de casas) resolve em centésimos de segundo.
 
-O enunciado do Trabalho 2 **não exige recursão** (diferente do Trabalho 1), então a BFS é
-iterativa, com fila.
+O enunciado **não exige recursão** (diferente do Trabalho 1), então a BFS é iterativa, com
+fila. Trocar a fila por pilha viraria uma DFS e perderia a garantia do menor caminho.
 
 ### Regra do pulo
 
-O enunciado descreve o pulo por uma figura (L para os dígitos 0, 1 e 2), sem fórmula. Regra
-adotada e usada em todo o projeto:
+O enunciado descreve o tamanho do pulo por uma figura (L para os dígitos 0, 1 e 2), sem fórmula.
 
 - **Tamanho do L**: na figura as pernas têm 2 e 1 passos (d=0), 3 e 2 (d=1) e 4 e 3 (d=2); as
   casas em vermelho são o acréscimo de `d` casas em cada perna. Logo, **pernas `(1+d, 2+d)` nas
-  8 orientações** (`(±(1+d), ±(2+d))` e `(±(2+d), ±(1+d))`). Com `d = 0` cai no pulo normal de
-  xadrez. Vem da figura, não de confirmação do professor.
+  8 orientações**. Com `d = 0` cai no pulo normal de xadrez. Para os dígitos 3 a 9, que a figura
+  não mostra, o padrão é estendido; o relatório avisa isso (Seção 2.3 e Limitações).
 - **De qual casa vem o dígito**: o da casa onde o cavalo **está**, não o da casa onde ele vai
-  chegar. Confirmado pelo professor (resposta repassada em 01/10/2026).
-- **Casa `C`**: o marcador cobre o dígito daquela casa, e o professor definiu que ali o tamanho
-  do pulo é **0**, ou seja, o primeiro pulo é um pulo comum de xadrez. A casa `S` não influi,
-  porque a busca termina ao chegar nela. Constante `CavaloHiperpulos.DIGITO_EM_C`.
-- Os dois esclarecimentos constam do enunciado novo (Moodle), que desde 02/10/2026 é o
-  `enunciado/01-enunciado.pdf`.
+  chegar. Esclarecido pelo professor em 01/10/2026 e presente no enunciado novo (Moodle).
+- **Casa `C`**: o marcador cobre o dígito daquela casa, e ali o tamanho do pulo é **0**: o
+  primeiro pulo é um pulo comum de xadrez (`CavaloHiperpulos.DIGITO_EM_C`). A casa `S` não
+  influi, porque a busca termina ao chegar nela.
 
 O exemplo numérico do enunciado (**C → S em 3 pulos**) confere com essa regra. As duas outras
 famílias de pernas testadas, `(2, 1+d)`/`(1+d, 2)` e `(1, 2+d)`/`(2+d, 1)`, também dão 3 pulos
-no exemplo com o dígito 0 em `C`, então o exemplo não as distingue; a figura as descarta (a
-primeira daria pernas iguais, 2 e 2, para d=1, que não é um L; na segunda só uma perna
-cresce). O relatório traz isso na tabela `tab:hipoteses` de `02-modelagem.tex`.
-
-O relatório trata a regra como parte do enunciado, sem mencionar dúvida (decisão do usuário,
-01/10/2026): a tabela que comparava as leituras alternativas foi retirada do relatório, do
-código de medição e do arquivo de referência. Não reintroduzir.
+no exemplo, então o exemplo não as distingue; quem as descarta é a figura (a primeira daria
+pernas iguais, 2 e 2, para d=1, que não é um L; na segunda só uma perna cresce). O relatório
+traz isso na Tabela 1. Não há no relatório tabela de leituras alternativas do enunciado.
 
 ## O que a verificação cobre
 
@@ -107,69 +80,42 @@ fila em array de int) para que um erro no solver não se repita igual na confer�
   o caminho ótimo é reconstruído e conferido pulo a pulo.
 - **Saída "impossível"**: exercitada por um tabuleiro sem solução achado por sorteio.
 
-## O que o feedback do Trabalho 1 pede do relatório
+Essas conferências testam a implementação da regra adotada, não a extensão da figura aos
+dígitos 3 a 9.
 
-O professor devolveu o relatório do Trabalho 1 com correções à mão e a rubrica preenchida. O
-detalhe (notas e anotações) fica em arquivo local, fora do git, porque o repositório é público.
-O que vale para o Trabalho 2, em resumo:
+## Relatório (`relatorio/`)
+
+LaTeX para o Overleaf; `preambulo.tex` é o modelo fixo, reaproveitável. Instruções em
+`relatorio/LEIA-ME.txt`. O zip de upload (`relatorio-overleaf.zip`) e o PDF de rascunho são
+gerados e ficam fora do git. A data está fixa em 11 de novembro de 2026.
+
+Decisões:
+
+- **Sem capa, sem travessões, sem bibliografia** (não é exigida; as afirmações sobre BFS e
+  Dijkstra valem como conhecimento da disciplina).
+- **Voz impessoal, sem primeira pessoa.** O modelo do professor
+  (`Trabalho1/enunciado/03-exemplo-artigo-modelo.pdf`, p. 2) proíbe o singular, mesmo em trabalho
+  individual, e diz que a voz passiva/impessoal ("faz-se", "analisa-se") é melhor que o plural.
+- **Melhorias da conclusão foram medidas**: parar ao descobrir S (1,5 a 1,9×) e casas como
+  inteiros (2,9 a 4,4×). Busca bidirecional e vetor de bits aparecem como ideias não testadas.
+- Os números das tabelas de variantes e de resultados vêm de medições separadas da mesma função
+  e diferem alguns por cento; a legenda avisa.
+- A rubrica (`Trabalho1/enunciado/02-criterios-avaliacao.pdf`) pesa, em ordem: Desenvolvimento
+  2,5; Algoritmos 2,0; Análise/Conclusão 2,0; Apresentação, Eficiência e Testes 1,0 cada;
+  Figuras/Tabelas 0,5.
+
+### Checklist de escrita (lições do relatório do Trabalho 1)
 
 1. **Sem capa.** Título e autor no topo da primeira página.
-2. **Todo "percebemos", "eficiente" ou "mais rápido" precisa de "como" e "por quê"** logo ao lado,
-   com dado ou dedução. É o padrão de quase todas as anotações.
-3. **Cada pseudo-código com explicação das etapas e um exemplo rodado** (trace). As tabelas de
-   trace devem mostrar o resultado intermediário, não só as condições.
-4. **Complexidade em Θ(·), de tempo e de espaço**, deduzida, e relacionada com os tempos medidos.
-5. **Justificar a técnica e o que se descartou**, inclusive a escolha de BFS iterativa (o T2 não
-   exige recursão): por que fila e não pilha, e por que recursão não serviria (profundidade até
-   N² estouraria a pilha, a mesma causa do estouro da versão ingênua do T1).
-6. **Figuras e tabelas para explicar o algoritmo**, não só para exibir resultados: um tabuleiro
-   pequeno com a expansão da BFS por níveis e o "dar a volta" do toro valem mais pontos do que
-   mais uma tabela de tempos.
+2. **Toda afirmação ("eficiente", "mais rápido") precisa de "como" e "por quê"** logo ao lado,
+   com dado ou dedução.
+3. **Cada pseudo-código com explicação das etapas e um exemplo rodado** (trace), com resultado
+   intermediário.
+4. **Complexidade em Θ(·), de tempo e de espaço**, deduzida e relacionada com os tempos medidos.
+5. **Justificar a técnica e o que se descartou**, inclusive BFS iterativa em vez de recursiva.
+6. **Figuras e tabelas para explicar o algoritmo**, não só para exibir resultados.
 7. **Conclusão com melhorias concretas e explicadas** (como funcionaria, por que ajudaria, o
-   que custa), não uma frase solta.
-8. **Conferir cada explicação com um contraexemplo antes de escrever**: uma justificativa que só
-   vale para um caso particular induz o leitor ao erro.
+   que custa) e com limitações.
+8. **Conferir cada explicação com um contraexemplo antes de escrever.**
 9. Gráficos com o eixo ajustado aos dados; não repetir o mesmo resultado em duas seções.
-10. **Manter a validação independente dos resultados**, que funcionou no T1. A
-    `ValidacaoHiperpulos` já cobre isso.
-
-## Pendências
-
-1. ~~Anotar o feedback do Trabalho 1~~ — feito (detalhe em arquivo local; resumo na seção acima).
-2. ~~Escrever o relatório~~ — rascunho completo em `relatorio/`. A rubrica
-   (`02-criterios-avaliacao.pdf`) pesa, em ordem: Desenvolvimento 2,5; Algoritmos 2,0;
-   Análise/Conclusão 2,0; Apresentação, Eficiência e Testes 1,0 cada; Figuras/Tabelas 0,5.
-   **Eficiência vale só 1,0**: o que pesa é justificar decisões e a conclusão com melhorias.
-3. ~~Resolver a leitura do enunciado~~ — **resolvido em 01/10/2026** (seção "Regra do pulo").
-   Solver e números intactos; relatório, README e CLAUDE.md ajustados.
-3b. ~~Trocar pelo enunciado novo~~ — feito em 02/10/2026: `enunciado/01-enunciado.pdf` agora é
-   a versão nova do Moodle. A regra do pulo bate com o esclarecimento do professor e com o
-   solver ("casinha onde o cavalo está"; em C "pulo comum de xadrez"); tabuleiro de exemplo,
-   figura e resposta de 3 pulos idênticos aos da versão antiga.
-4. ~~Figuras do relatório~~ — prontas em TikZ (`fig-pulos-em-L`, `fig-camadas-bfs`). Os 100
-   pares dígito/distância da segunda foram conferidos por script contra o tabuleiro do enunciado
-   e contra `medicoes-referencia.txt`. Falta só o usuário conferir se estão do seu gosto.
-5. **Antes de entregar**: conferir o PDF compilado contra a checklist "O que o feedback do
-   Trabalho 1 pede do relatório". A data já está fixa (11 de novembro de 2026) e não restam
-   lembretes `\pendente` no texto. Auditoria de 02/10/2026: os 10 pontos da checklist foram
-   conferidos contra o texto; ver o commit "Fecha a revisão final do Trabalho 2".
-
-### Decisões do rascunho do relatório (30/09/2026)
-
-- **Sem capa, sem travessões** (o T1 teve os travessões removidos na revisão final).
-- **Voz impessoal, sem primeira pessoa.** O modelo do professor
-  (`Trabalho1/enunciado/03-exemplo-artigo-modelo.pdf`, p. 2) diz para nunca usar o singular
-  ("fiz", "analisei"), mesmo em trabalho individual, e que a voz passiva/impessoal ("faz-se",
-  "analisa-se") é "melhor ainda" que o plural. O usuário notou que "pensamos/comparamos" sugeria
-  trabalho em dupla e pediu singular; foi explicado que o professor proíbe e o texto foi passado
-  para a voz impessoal ("modela-se", "foi conferido"). Ao escrever novas seções, evitar também
-  "nós".
-- **Afirmação que o relatório NÃO faz**, porque não se sustenta: que o exemplo do enunciado
-  distingue as regras de perna (as três dão 3 pulos com o dígito 0 em `C`; quem decide é a
-  figura).
-- **Melhorias da Conclusão foram medidas**, não só propostas: parar ao descobrir S (1,5 a 1,9×) e
-  casas como inteiros (2,9 a 4,4×). A busca bidirecional aparece como ideia não testada, com o
-  motivo (exige o grafo inverso).
-- Os tempos vêm de `medicoes-referencia.txt` (heap fixa de 2 GB). Os números da Tabela de
-  variantes e da Tabela de resultados são medições separadas da mesma função e diferem alguns
-  por cento; o texto avisa.
+10. **Manter a validação independente dos resultados.**
