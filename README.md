@@ -27,6 +27,7 @@ Trabalho2/
 │   ├── preambulo.tex
 │   ├── secoes/
 │   └── figuras/
+├── relatorio-trabalho2.pdf              # relatório final, compilado no Overleaf
 ├── medicoes-referencia.txt              # saída de MedicoesHiperpulos usada no relatório
 └── NOTAS.md                             # decisões de modelagem e como reproduzir
 ```
@@ -74,7 +75,7 @@ javac CavaloHiperpulos.java && java CavaloHiperpulos      # resolve os 8 casos
 javac ValidacaoHiperpulos.java && java ValidacaoHiperpulos # bateria de verificação
 ```
 
-**Individual.** Relatório: rascunho completo em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ. Trabalho concluído; entrega em 11 de novembro de 2026.
+**Individual.** Relatório concluído em LaTeX (`relatorio/`, para o Overleaf), com as figuras em TikZ; o projeto no Overleaf confere com esta pasta e compila sem avisos (11 páginas). Entrega em 11 de novembro de 2026.
 
 
 ## Licença
