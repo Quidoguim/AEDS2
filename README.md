@@ -10,8 +10,10 @@ Trabalho1/
 │   ├── 01-enunciado.pdf
 │   ├── 02-criterios-avaliacao.pdf
 │   └── 03-exemplo-artigo-modelo.pdf
-└── src/
-    └── NumerosDecompostos.java          # solução recursiva
+├── src/
+│   └── NumerosDecompostos.java          # solução recursiva
+├── relatorio-trabalho1.docx             # fonte do relatório
+└── relatorio-trabalho1.pdf              # relatório final entregue
 
 Trabalho2/
 ├── enunciado/
@@ -27,12 +29,12 @@ Trabalho2/
 │   ├── preambulo.tex
 │   ├── secoes/
 │   └── figuras/
-├── relatorio-trabalho2.pdf              # relatório final, compilado no Overleaf
+├── relatorio-trabalho2.pdf              # relatório final entregue (compilado no Overleaf)
 ├── medicoes-referencia.txt              # saída de MedicoesHiperpulos usada no relatório
 └── NOTAS.md                             # decisões de modelagem e como reproduzir
 ```
 
-Cada `TrabalhoN/` traz o enunciado do professor em `enunciado/` (renomeado de forma clara) e a implementação em `src/`. Todo relatório precisa cobrir: problema, modelagem, processo de solução (com exemplos e algoritmos), resultados dos casos de teste e conclusões — ver rubrica e exemplos em `Trabalho1/enunciado/`.
+Cada `TrabalhoN/` traz o enunciado do professor em `enunciado/` (renomeado de forma clara), a implementação em `src/` e o PDF do relatório entregue em `relatorio-trabalhoN.pdf`. Todo relatório precisa cobrir: problema, modelagem, processo de solução (com exemplos e algoritmos), resultados dos casos de teste e conclusões — ver rubrica e exemplos em `Trabalho1/enunciado/`.
 
 ## Trabalho 1 — Números Decompostos
 

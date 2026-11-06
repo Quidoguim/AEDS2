@@ -46,6 +46,7 @@ The Trabalho 2 report is written in **LaTeX for Overleaf**, in `Trabalho2/relato
 
 ## Conventions
 
+- **Final report PDF is versioned**: each assignment keeps the exact PDF submitted on Moodle at `TrabalhoN/relatorio-trabalhoN.pdf`, next to its source (`.docx` for Trabalho 1, `relatorio/` LaTeX for Trabalho 2). Commit it once the report is final, so the public repo shows the report without building anything; drafts (`relatorio-rascunho.pdf`, upload zips) stay gitignored.
 - **README.md**: keep it updated as the work progresses — it is the live status of the assignment (structure tree, per-range status table, deliverable checklist), not a one-time snapshot.
 - **Commits**: short imperative Portuguese subject line (e.g. "Adiciona", "Cria", "Renomeia"), no conventional-commit prefix; add a body paragraph when the *why* isn't obvious from the diff. Matches the convention used across this account's other course repos (`SO`, `PSB`, `SMA`, `CSW`).
 - **Java** is the implementation language for both assignments: plain files in `TrabalhoN/src/`, default package, no build tool, run with `javac`/`java` from inside `src/`. Portuguese identifiers, `System.nanoTime()` for timing, results printed with `printf` in a shape that can be pasted into the README table. No test framework — verification lives in a companion class with its own `main`.
